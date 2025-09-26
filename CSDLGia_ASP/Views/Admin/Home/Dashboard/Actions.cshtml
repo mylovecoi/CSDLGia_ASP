@@ -39,10 +39,10 @@
                     <!--end::Text-->
                     <!--begin::Dropdown-->
                     @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdlmucgiahhdv.giadat.giadatdb.xetduyet", "Index"))
-                    {                        
+                    {
                         <a class="btn btn-hover-light-primary btn-sm btn-icon" asp-controller="GiaDatDiaBanXd" asp-action="Index" title="Xem chi tiết">
                             <i class="ki ki-bold-more-hor"></i>
-                        </a>                        
+                        </a>
                     }
                     <!--end::Dropdown-->
                 </div>
@@ -152,7 +152,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-               @*  <div class="d-flex align-items-center mb-2">
+                @*  <div class="d-flex align-items-center mb-2">
                     <!--begin::Symbol-->
                     <div class="symbol symbol-40 symbol-light-success mr-5">
                         <span class="symbol-label">
@@ -229,24 +229,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in ThongTinHoSo.GiaDatDiaBanCt.OrderBy(t=>t.Sapxep))
+                            @if (ThongTinHoSo.GiaDatDiaBanCt != null)
                             {
-                                <tr>
-                                    <td style="text-align:center">@item.HienThi</td>
-                                    <td style="text-align:left">@item.Loaidat</td>
-                                    <td style="text-align:left">@item.Mota</td>
-                                    <td style="text-align:center">@item.Diemdau</td>
-                                    <td style="text-align:center">@item.Diemcuoi</td>
-                                    <td style="text-align:center">@item.Loaiduong</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt1)</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt2)</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt3)</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt4)</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt5)</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt6)</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt7)</td>
-                                    <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavtconlai)</td>
-                                </tr>
+                                @foreach (var item in ThongTinHoSo.GiaDatDiaBanCt.OrderBy(t => t.Sapxep))
+                                {
+                                    <tr>
+                                        <td style="text-align:center">@item.HienThi</td>
+                                        <td style="text-align:left">@item.Loaidat</td>
+                                        <td style="text-align:left">@item.Mota</td>
+                                        <td style="text-align:center">@item.Diemdau</td>
+                                        <td style="text-align:center">@item.Diemcuoi</td>
+                                        <td style="text-align:center">@item.Loaiduong</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt1)</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt2)</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt3)</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt4)</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt5)</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt6)</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt7)</td>
+                                        <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavtconlai)</td>
+                                    </tr>
+                                }
                             }
                         </tbody>
                     </table>

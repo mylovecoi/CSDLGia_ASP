@@ -1,4 +1,5 @@
-﻿using CSDLGia_ASP.Database;
+﻿using Aspose.Words;
+using CSDLGia_ASP.Database;
 using CSDLGia_ASP.Helper;
 using CSDLGia_ASP.Models.Systems;
 using CSDLGia_ASP.Services;
@@ -31,7 +32,6 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
         [HttpGet]
         public IActionResult Index(string Madv)
         {
-            //if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")) || Helpers.GetSsAdmin(HttpContext.Session, "Level") == "DN")
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
             {
                 if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtindonvi", "Index"))
@@ -41,7 +41,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                     if (Helpers.GetSsAdmin(HttpContext.Session, "Level") == "DN")
                     {
                         Madv = Helpers.GetSsAdmin(HttpContext.Session, "Madv");
-                        model_dn = model_dn.Where(t=>t.Madv == Madv);
+                        model_dn = model_dn.Where(t => t.Madv == Madv);
                     }
                     //else
                     //{
@@ -113,87 +113,95 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
         [HttpGet]
         public IActionResult Edit(string Madv)
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")) ||
-                    Helpers.GetSsAdmin(HttpContext.Session, "Level") == "DN")
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
             {
-                var modelct_cxd = _db.TtDnTdCt.Where(t => t.Trangthai == "CXD" && t.Madv == Madv);
-                if (modelct_cxd.Any())
+                if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtindonvi", "Edit"))
                 {
-                    _db.TtDnTdCt.RemoveRange(modelct_cxd);
-                    _db.SaveChanges();
-                }
-
-                var model = _db.Company.FirstOrDefault(t => t.Madv == Madv);
-                var model_new = new VMCompany
-                {
-                    Id = model.Id,
-                    Madv = model.Madv,
-                    Madiaban = model.Madiaban,
-                    Mahs = model.Mahs,
-                    Macqcq = model.Macqcq,
-                    Tendn = model.Tendn,
-                    Tel = model.Tel,
-                    Fax = model.Fax,
-                    Email = model.Email,
-                    Website = model.Website,
-                    Tailieu = model.Tailieu,
-                    Diachi = model.Diachi,
-                    Chucdanh = model.Chucdanh,
-                    Nguoiky = model.Nguoiky,
-                    Diadanh = model.Diadanh,
-                    Giayphepkd = model.Giayphepkd,
-                    Created_at = model.Created_at,
-                };
-
-
-
-
-                /* 31/03/2024 
-                Kiểm tra trong TtDnTdCt
-                -1. Đã có bỏ qua ko thêm vào bảng TtDnTdCt
-                -2. Chưa có thì thêm từ CompanyLvCc vào TtDnTdCt
-                */
-                var ttThayDoi = _db.TtDnTdCt.Where(t => t.Madv == model_new.Madv);
-                if (!ttThayDoi.Any())
-                {
-                    foreach (var item in _db.CompanyLvCc.Where(t => t.Madv == model_new.Madv))
+                    var modelct_cxd = _db.TtDnTdCt.Where(t => t.Trangthai == "CXD" && t.Madv == Madv);
+                    if (modelct_cxd.Any())
                     {
-                        var model_ttdntd_ct = new TtDnTdCt
-                        {
-                            Madv = item.Madv,
-                            Manghe = item.Manghe,
-                            Manganh = item.Manganh,
-                            Macqcq = item.Macqcq,
-                            Trangthai = item.Trangthai,
-                            Created_at = DateTime.Now,
-                        };
-                        _db.TtDnTdCt.Add(model_ttdntd_ct);
+                        _db.TtDnTdCt.RemoveRange(modelct_cxd);
+                        _db.SaveChanges();
                     }
-                    _db.SaveChanges();
+
+                    var model = _db.Company.FirstOrDefault(t => t.Madv == Madv);
+                    var model_new = new VMCompany
+                    {
+                        Id = model.Id,
+                        Madv = model.Madv,
+                        Madiaban = model.Madiaban,
+                        Mahs = model.Mahs,
+                        Macqcq = model.Macqcq,
+                        Tendn = model.Tendn,
+                        Tel = model.Tel,
+                        Fax = model.Fax,
+                        Email = model.Email,
+                        Website = model.Website,
+                        Tailieu = model.Tailieu,
+                        Diachi = model.Diachi,
+                        Chucdanh = model.Chucdanh,
+                        Nguoiky = model.Nguoiky,
+                        Diadanh = model.Diadanh,
+                        Giayphepkd = model.Giayphepkd,
+                        Created_at = model.Created_at,
+                    };
+
+
+
+
+                    /* 31/03/2024 
+                    Kiểm tra trong TtDnTdCt
+                    -1. Đã có bỏ qua ko thêm vào bảng TtDnTdCt
+                    -2. Chưa có thì thêm từ CompanyLvCc vào TtDnTdCt
+                    */
+                    var ttThayDoi = _db.TtDnTdCt.Where(t => t.Madv == model_new.Madv);
+                    if (!ttThayDoi.Any())
+                    {
+                        foreach (var item in _db.CompanyLvCc.Where(t => t.Madv == model_new.Madv))
+                        {
+                            var model_ttdntd_ct = new TtDnTdCt
+                            {
+                                Madv = item.Madv,
+                                Manghe = item.Manghe,
+                                Manganh = item.Manganh,
+                                Macqcq = item.Macqcq,
+                                Trangthai = item.Trangthai,
+                                Created_at = DateTime.Now,
+                            };
+                            _db.TtDnTdCt.Add(model_ttdntd_ct);
+                        }
+                        _db.SaveChanges();
+                    }
+                    var model_ct = from com_ct in _db.TtDnTdCt.Where(t => t.Madv == model_new.Madv)
+                                   join nghe in _db.DmNgheKd on com_ct.Manghe equals nghe.Manghe
+                                   select new VMCompanyLvCc
+                                   {
+                                       Id = com_ct.Id,
+                                       Manghe = com_ct.Manghe,
+                                       Macqcq = com_ct.Macqcq,
+                                       Madv = com_ct.Madv,
+                                       Manganh = com_ct.Manganh,
+                                       Tennghe = nghe.Tennghe,
+                                       Trangthai = com_ct.Trangthai
+                                   };
+                    model_new.VMCompanyLvCc = model_ct.ToList();
+
+
+                    ViewData["Madv"] = Madv;
+                    ViewData["DsDonVi"] = _db.DsDonVi;
+                    ViewData["DmNganhKd"] = _db.DmNganhKd;
+                    ViewData["DmNgheKd"] = _db.DmNgheKd;
+                    ViewData["Title"] = "Thông tin doanh nghiệp chỉnh sửa";
+                    ViewData["MenuLv1"] = "menu_kekhaidangkygia";
+                    ViewData["MenuLv2"] = "menu_kekhaidangkygia_thongtindonvi";
+                    return View("Views/Admin/Systems/TtDnTd/Edit.cshtml", model_new);
                 }
-                var model_ct = from com_ct in _db.TtDnTdCt.Where(t => t.Madv == model_new.Madv)
-                               join nghe in _db.DmNgheKd on com_ct.Manghe equals nghe.Manghe
-                               select new VMCompanyLvCc
-                               {
-                                   Id = com_ct.Id,
-                                   Manghe = com_ct.Manghe,
-                                   Macqcq = com_ct.Macqcq,
-                                   Madv = com_ct.Madv,
-                                   Manganh = com_ct.Manganh,
-                                   Tennghe = nghe.Tennghe,
-                                   Trangthai = com_ct.Trangthai
-                               };
-                model_new.VMCompanyLvCc = model_ct.ToList();
+                else
+                {
+                    ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
+                    return View("Views/Admin/Error/Page.cshtml");
+                }
 
-
-                ViewData["Madv"] = Madv;
-                ViewData["DsDonVi"] = _db.DsDonVi;
-                ViewData["DmNganhKd"] = _db.DmNganhKd;
-                ViewData["DmNgheKd"] = _db.DmNgheKd;
-                ViewData["Title"] = "Thông tin doanh nghiệp chỉnh sửa";
-                ViewData["MenuLv1"] = "menu_kekhaidangkygia";
-                ViewData["MenuLv2"] = "menu_kekhaidangkygia_thongtindonvi";
-                return View("Views/Admin/Systems/TtDnTd/Edit.cshtml", model_new);
             }
             else
             {
@@ -205,63 +213,71 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
         [HttpPost]
         public async Task<IActionResult> Update(VMCompany request, IFormFile Giayphepkdupload)
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")) ||
-                    Helpers.GetSsAdmin(HttpContext.Session, "Level") == "DN")
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
             {
-                if (Giayphepkdupload != null && Giayphepkdupload.Length > 0)
+                if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtindonvi", "Edit"))
                 {
-                    string wwwRootPath = _hostEnvironment.WebRootPath;
-                    string filename = Path.GetFileNameWithoutExtension(Giayphepkdupload.FileName);
-                    string extension = Path.GetExtension(Giayphepkdupload.FileName);
-                    filename = filename + DateTime.Now.ToString("yymmssfff") + extension;
-                    string path = Path.Combine(wwwRootPath + "/Upload/File/", filename);
-                    using (var FileStream = new FileStream(path, FileMode.Create))
+                    if (Giayphepkdupload != null && Giayphepkdupload.Length > 0)
                     {
-                        await Giayphepkdupload.CopyToAsync(FileStream);
+                        string wwwRootPath = _hostEnvironment.WebRootPath;
+                        string filename = Path.GetFileNameWithoutExtension(Giayphepkdupload.FileName);
+                        string extension = Path.GetExtension(Giayphepkdupload.FileName);
+                        filename = filename + DateTime.Now.ToString("yymmssfff") + extension;
+                        string path = Path.Combine(wwwRootPath + "/Upload/File/", filename);
+                        using (var FileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await Giayphepkdupload.CopyToAsync(FileStream);
+                        }
+                        request.Giayphepkd = filename;
                     }
-                    request.Giayphepkd = filename;
+
+                    var ttdntd = new TtDnTd
+                    {
+                        Madv = request.Madv,
+                        Mahs = request.Mahs,
+                        Macqcq = request.Macqcq,
+                        Madiaban = request.Madiaban,
+                        Tendn = request.Tendn,
+                        Diachi = request.Diachi,
+                        Tel = request.Tel,
+                        Fax = request.Fax,
+                        Email = request.Email,
+                        Diadanh = request.Diadanh,
+                        Chucdanh = request.Chucdanh,
+                        Nguoiky = request.Nguoiky,
+                        Ghichu = request.Ghichu,
+                        Trangthai = "CC",
+                        Tailieu = request.Tailieu,
+                        Giayphepkd = request.Giayphepkd,
+                        Level = request.Level,
+                        Lydo = request.Lydo,
+                        Created_at = DateTime.Now,
+                        Updated_at = DateTime.Now,
+                        Ngaychuyen = DateTime.Now,
+                    };
+                    _db.TtDnTd.Add(ttdntd);
+                    _db.SaveChanges();
+
+                    var ttdntd_ct_new = _db.TtDnTdCt.Where(t => t.Madv == request.Madv);
+                    if (ttdntd_ct_new != null)
+                    {
+                        foreach (var item in ttdntd_ct_new)
+                        {
+                            item.Mahs = ttdntd.Mahs;
+                            item.Trangthai = "XD";
+                        }
+                    }
+                    _db.TtDnTdCt.UpdateRange(ttdntd_ct_new);
+                    _db.SaveChanges();
+
+                    return RedirectToAction("Index", "TtDnTd", new { Madv = request.Madv });
+                }
+                else
+                {
+                    ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
+                    return View("Views/Admin/Error/Page.cshtml");
                 }
 
-                var ttdntd = new TtDnTd
-                {
-                    Madv = request.Madv,
-                    Mahs = request.Mahs,
-                    Macqcq = request.Macqcq,
-                    Madiaban = request.Madiaban,
-                    Tendn = request.Tendn,
-                    Diachi = request.Diachi,
-                    Tel = request.Tel,
-                    Fax = request.Fax,
-                    Email = request.Email,
-                    Diadanh = request.Diadanh,
-                    Chucdanh = request.Chucdanh,
-                    Nguoiky = request.Nguoiky,
-                    Ghichu = request.Ghichu,
-                    Trangthai = "CC",
-                    Tailieu = request.Tailieu,
-                    Giayphepkd = request.Giayphepkd,
-                    Level = request.Level,
-                    Lydo = request.Lydo,
-                    Created_at = DateTime.Now,
-                    Updated_at = DateTime.Now,
-                    Ngaychuyen = DateTime.Now,
-                };
-                _db.TtDnTd.Add(ttdntd);
-                _db.SaveChanges();
-
-                var ttdntd_ct_new = _db.TtDnTdCt.Where(t => t.Madv == request.Madv);
-                if (ttdntd_ct_new != null)
-                {
-                    foreach (var item in ttdntd_ct_new)
-                    {
-                        item.Mahs = ttdntd.Mahs;
-                        item.Trangthai = "XD";
-                    }
-                }
-                _db.TtDnTdCt.UpdateRange(ttdntd_ct_new);
-                _db.SaveChanges();
-
-                return RedirectToAction("Index", "TtDnTd", new { Madv = request.Madv });
             }
             else
             {
@@ -271,17 +287,24 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
 
         public IActionResult Chuyen(string Madv)
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")) ||
-                    Helpers.GetSsAdmin(HttpContext.Session, "Level") == "DN")
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
             {
-                var model = _db.TtDnTd.FirstOrDefault(t => t.Madv == Madv);
-                model.Trangthai = "CD";
-                model.Ngaychuyen = DateTime.Now;
+                if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtindonvi", "Approve"))
+                {
+                    var model = _db.TtDnTd.FirstOrDefault(t => t.Madv == Madv);
+                    model.Trangthai = "CD";
+                    model.Ngaychuyen = DateTime.Now;
 
-                _db.TtDnTd.Update(model);
-                _db.SaveChanges();
+                    _db.TtDnTd.Update(model);
+                    _db.SaveChanges();
 
-                return RedirectToAction("Index", "TtDnTd", new { Madv = Madv });
+                    return RedirectToAction("Index", "TtDnTd", new { Madv = Madv });
+                }
+                else
+                {
+                    ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
+                    return View("Views/Admin/Error/Page.cshtml");
+                }
             }
             else
             {
@@ -293,32 +316,64 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
         [HttpPost]
         public JsonResult Store(string Madv, string Manghe, string Macqcq)
         {
-            var model = new TtDnTdCt
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
             {
-                Madv = Madv,
-                Manghe = Manghe,
-                Macqcq = Macqcq,
-                Trangthai = "CXD",
-                Created_at = DateTime.Now,
-                Updated_at = DateTime.Now,
-            };
-            _db.TtDnTdCt.Add(model);
-            _db.SaveChanges();
-            string result = this.GetData(Madv);
-            var data = new { status = "success", message = result };
-            return Json(data);
+                if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtindonvi", "Create"))
+                {
+                    var model = new TtDnTdCt
+                    {
+                        Madv = Madv,
+                        Manghe = Manghe,
+                        Macqcq = Macqcq,
+                        Trangthai = "CXD",
+                        Created_at = DateTime.Now,
+                        Updated_at = DateTime.Now,
+                    };
+                    _db.TtDnTdCt.Add(model);
+                    _db.SaveChanges();
+                    string result = this.GetData(Madv);
+                    var data = new { status = "success", message = result };
+                    return Json(data);
+                }
+                else
+                {
+                    var data = new { status = "error", message = "Bạn không có quyền truy cập vào chức năng này!" };
+                    return Json(data);
+                }
+            }
+            else
+            {
+                var data = new { status = "error", message = "Bạn chưa đăng nhập hoặc phiên làm việc của bạn đã kết thúc" };
+                return Json(data);
+            }
         }
 
         [Route("DoanhNghiepCt/Delete")]
         [HttpPost]
         public JsonResult Delete(int Id)
         {
-            var model = _db.TtDnTdCt.FirstOrDefault(t => t.Id == Id);
-            _db.TtDnTdCt.Remove(model);
-            _db.SaveChanges();
-            string result = this.GetData(model.Madv);
-            var data = new { status = "success", message = result };
-            return Json(data);
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
+            {
+                if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtindonvi", "Delete"))
+                {
+                    var model = _db.TtDnTdCt.FirstOrDefault(t => t.Id == Id);
+                    _db.TtDnTdCt.Remove(model);
+                    _db.SaveChanges();
+                    string result = this.GetData(model.Madv);
+                    var data = new { status = "success", message = result };
+                    return Json(data);
+                }
+                else
+                {
+                    var data = new { status = "error", message = "Bạn không có quyền truy cập vào chức năng này!" };
+                    return Json(data);
+                }
+            }
+            else
+            {
+                var data = new { status = "error", message = "Bạn chưa đăng nhập hoặc phiên làm việc của bạn đã kết thúc" };
+                return Json(data);
+            }
         }
 
         //Get
