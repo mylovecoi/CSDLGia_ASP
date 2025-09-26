@@ -46,7 +46,7 @@ namespace CSDLGia_ASP.Services
 
         private void Recursive(List<DsDonVi> ListDonVi, string Madv)
         {
-            var model = _db.DsDonVi.Where(t => t.MaCqcq == Madv).ToList();
+            var model = _db.DsDonVi.Where(t => t.MaCqcq == Madv && t.MaDv != Madv).ToList();
             if (model.Any())
             {
                 foreach (var item in model)
