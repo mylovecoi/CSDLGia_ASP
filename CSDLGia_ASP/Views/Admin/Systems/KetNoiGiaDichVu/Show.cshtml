@@ -119,23 +119,29 @@
             {
                 @foreach (var item in Model.HoSoKeKhaiGia_ChiTiet)
                 {
+                    decimal mucgiakk = 0;
+                    decimal mucgialk = 0;
 
+                    decimal.TryParse(item.mucgiakk, out mucgiakk);
+                    decimal.TryParse(item.mucgialk, out mucgialk);
+
+                    decimal chenhlech = mucgiakk - mucgialk;
                     <tr>
                         <td style="text-align: center">@(record_id++)</td>
                         <td>@item.loaip</td>
                         <td>@item.qccl</td>
                         <td style="text-align: center">@item.sohieu</td>
-                        <td style="text-align: right">@item.mucgialk</td>
-                        <td style="text-align: right">@item.mucgiakk</td>
-                        <td style="text-align: right"></td>
-                        @if (@item.mucgiakk == "0")
+                        <td style="text-align: right">@mucgialk</td>
+                        <td style="text-align: right">@mucgiakk</td>
+                        <td style="text-align: right">@chenhlech</td>
+                        @if (mucgiakk == 0)
                         {
                             <td style="text-align: right">100%</td>
                         }
                         else
                         {
                             <td style="text-align: right">
-                                0%
+                                @((chenhlech / mucgiakk * 100).ToString("0.##")) %
                             </td>
                         }
                         <td>@item.ghichu</td>

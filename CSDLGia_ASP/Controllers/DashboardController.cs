@@ -128,28 +128,7 @@ namespace CSDLGia_ASP.Controllers
             //                     TenNghe = dmnghe.Phanloai 
             //                 };
 
-            var model = _db.HoSoKeKhaiGia.Take(20).ToList();
-
-            var model_join = from hoso in model
-                             join cskd in _db.CoSoKinhDoanhDVLT on hoso.macskd equals cskd.macskd
-                             join dn in _db.DoanhNghiepDVLT on cskd.masothue equals dn.masothue
-                             select new CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu.HoSoKeKhaiGia
-                             {
-                                 id = hoso.id,
-                                 mahs = hoso.mahs,
-                                 tencskd = cskd.tencskd,
-                                 tendn = dn.tendn,
-                                 socv = hoso.socv,
-                                 ngaynhap = hoso.ngaynhap,
-                                 ngaychuyen = hoso.ngaychuyen,
-                                 ttnguoinop = hoso.ttnguoinop,
-                                 lydo = hoso.lydo,
-                                 trangthai = hoso.trangthai,
-                                 ngaynhan = hoso.ngaynhan,
-                                 cqcq = hoso.cqcq,
-                                 phanloai = hoso.phanloai,
-                                 loaihang = hoso.loaihang,
-                             };
+            var model = _db.HoSoKeKhaiGia.OrderByDescending(t=>t.ngaynhan).ToList();
 
             string result = "<div class='card card-custom card-stretch gutter-b' id='data_load'>";
             result += "<div class='card-header border-0 py-5'>";
@@ -168,13 +147,13 @@ namespace CSDLGia_ASP.Controllers
             result += "<th width='10%'>Phân loại</th>";
             result += "<th width='10%'>Số QĐ</th> ";
             result += "<th width='10%'>Thời điểm</th> ";
-            result += "<th>Đơn vị tiếp nhận hồ sơ</th>";
+            result += "<th>Thời gian tiếp nhận hồ sơ</th>";
             result += "</tr>";
             result += "</thead>";
             result += "<tbody>";
-            if (model_join.Any())
+            if (model.Any())
             {
-                foreach (var item in model_join)
+                foreach (var item in model)
                 {
                     result += "<tr>";
                     result += "<td style='text-align: center'>" + item.tendn + "</td> ";
@@ -182,7 +161,7 @@ namespace CSDLGia_ASP.Controllers
                     result += "<td style='text-align: center'>" + item.plhs + "</td>";
                     result += "<td style='text-align: center'><a target='_blank' href='/HoSoKeKhaiGia/Show?&Mahs=" + item.mahs + "'>" + item.socv + "</a></td>";
                     result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.ngaynhap) + "</td>";
-                    result += "<td style='text-align: center'>" + item.cqcq + "<br/> Ngày duyệt:" + Helpers.ConvertDateToStr(item.ngaynhan) + "</td>";
+                    result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.ngaynhan) + "</td>";
                     result += "</tr>";
                 }
             }
