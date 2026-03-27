@@ -374,3 +374,6 @@ FodyWeavers.xsd
 /.gitignore
 /.gitignore
 /.gitignore
+/CSDLGia_ASP/.sonarqube/conf
+/.sonarqube/conf
+/CSDLGia_ASP/appsettings.json
