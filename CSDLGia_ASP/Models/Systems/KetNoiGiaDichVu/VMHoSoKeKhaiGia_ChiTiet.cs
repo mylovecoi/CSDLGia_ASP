@@ -24,7 +24,7 @@ namespace CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu
         {
             get
             {
-                if (double.TryParse(mucgialk, out double result))
+                if (double.TryParse(mucgiakk, out double result))
                     return result;
                 return 0;
             }

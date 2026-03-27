@@ -106,7 +106,7 @@
             <th width="2%">STT</th>
             <th>Tên hàng hóa, dịch vụ</th>
             <th>Quy cách, <br>chất lượng</th>
-            <th>Đơn vị<br>tính</th>
+            <th>Số hiêu phòng<br>tính</th>
             <th width="10%">Mức giá <br>kê khai hiện<br>hành</th>
             <th width="10%">Mức giá <br>kê khai mới</th>
             <th>Mức tăng giảm</th>
@@ -123,11 +123,11 @@
                     <td style="text-align: center">@(record_id++)</td>
                     <td>@item.loaip</td>
                     <td>@item.qccl</td>
-                    <td style="text-align: center"></td>
-                    <td style="text-align: right>@Helpers.ConvertDbToStr(item.mucgiakkValue)</td>
+                    <td style="text-align: center">@item.sohieu</td>
                     <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgialkValue)</td>
+                    <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgiakkValue)</td>
                     <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgiakkValue - item.mucgialkValue)</td>
-                    @if (@Helpers.ConvertStrToDb(item.mucgiakk) == 0)
+                    @if (@item.mucgiakkValue == 0)
                         {
                         <td style="text-align: right">100</td>
                         }
