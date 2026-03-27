@@ -102,31 +102,55 @@ namespace CSDLGia_ASP.Controllers
         [HttpPost("Dashboard/GetDichVuLuuTru")]
         public IActionResult GetDichVuLuuTru()
         {
-            var model = _db.KeKhaiDangKyGia.Where(t => t.MaNghe == "LUUTRU" && t.NgayDuyet.Year == DateTime.Now.Year && t.NgayDuyet.Month == DateTime.Now.Month && t.TrangThai == "CB");
+            //var model = _db.KeKhaiDangKyGia.Where(t => t.MaNghe == "LUUTRU" && t.NgayDuyet.Year == DateTime.Now.Year && t.NgayDuyet.Month == DateTime.Now.Month && t.TrangThai == "CB");
+
+            //var model_join = from hoso in model
+            //                 join cskd in _db.KeKhaiDangKyGiaCSKD on hoso.MaCsKd equals cskd.MaCsKd
+            //                 join dn in _db.Company on cskd.MaDv equals dn.Madv
+            //                 join donvi in _db.DsDonVi on hoso.MaCqCq equals donvi.MaDv
+            //                 join dmnghe in _db.DmNgheKd on hoso.MaNghe equals dmnghe.Manghe
+            //                 select new CSDLGia_ASP.Models.Manages.KeKhaiDangKyGia.KeKhaiDangKyGia
+            //                 {
+            //                     Id = hoso.Id,
+            //                     Mahs = hoso.Mahs,
+            //                     TenCsKd = cskd.TenCsKd,
+            //                     TenDv = dn.Tendn,
+            //                     SoQD = hoso.SoQD,
+            //                     NgayQD = hoso.NgayQD,
+            //                     NgayChuyen = hoso.NgayChuyen,
+            //                     ThongTinNguoiChuyen = hoso.ThongTinNguoiChuyen,
+            //                     LyDo = hoso.LyDo,
+            //                     TrangThai = hoso.TrangThai,
+            //                     NgayDuyet = hoso.NgayDuyet,
+            //                     TenCqCq = donvi.TenDv,
+            //                     MaCqCq = hoso.MaCqCq,
+            //                     MaNghe = hoso.MaNghe,
+            //                     TenNghe = dmnghe.Phanloai 
+            //                 };
+
+            var model = _db.HoSoKeKhaiGia.Take(20).ToList();
 
             var model_join = from hoso in model
-                             join cskd in _db.KeKhaiDangKyGiaCSKD on hoso.MaCsKd equals cskd.MaCsKd
-                             join dn in _db.Company on cskd.MaDv equals dn.Madv
-                             join donvi in _db.DsDonVi on hoso.MaCqCq equals donvi.MaDv
-                             join dmnghe in _db.DmNgheKd on hoso.MaNghe equals dmnghe.Manghe
-                             select new CSDLGia_ASP.Models.Manages.KeKhaiDangKyGia.KeKhaiDangKyGia
+                             join cskd in _db.CoSoKinhDoanhDVLT on hoso.macskd equals cskd.macskd
+                             join dn in _db.DoanhNghiepDVLT on cskd.masothue equals dn.masothue
+                             select new CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu.HoSoKeKhaiGia
                              {
-                                 Id = hoso.Id,
-                                 Mahs = hoso.Mahs,
-                                 TenCsKd = cskd.TenCsKd,
-                                 TenDv = dn.Tendn,
-                                 SoQD = hoso.SoQD,
-                                 NgayQD = hoso.NgayQD,
-                                 NgayChuyen = hoso.NgayChuyen,
-                                 ThongTinNguoiChuyen = hoso.ThongTinNguoiChuyen,
-                                 LyDo = hoso.LyDo,
-                                 TrangThai = hoso.TrangThai,
-                                 NgayDuyet = hoso.NgayDuyet,
-                                 TenCqCq = donvi.TenDv,
-                                 MaCqCq = hoso.MaCqCq,
-                                 MaNghe = hoso.MaNghe,
-                                 TenNghe = dmnghe.Phanloai 
+                                 id = hoso.id,
+                                 mahs = hoso.mahs,
+                                 tencskd = cskd.tencskd,
+                                 tendn = dn.tendn,
+                                 socv = hoso.socv,
+                                 ngaynhap = hoso.ngaynhap,
+                                 ngaychuyen = hoso.ngaychuyen,
+                                 ttnguoinop = hoso.ttnguoinop,
+                                 lydo = hoso.lydo,
+                                 trangthai = hoso.trangthai,
+                                 ngaynhan = hoso.ngaynhan,
+                                 cqcq = hoso.cqcq,
+                                 phanloai = hoso.phanloai,
+                                 loaihang = hoso.loaihang,
                              };
+
             string result = "<div class='card card-custom card-stretch gutter-b' id='data_load'>";
             result += "<div class='card-header border-0 py-5'>";
             result += "<h3 class='card-title align-items-start flex-column'>";
@@ -153,12 +177,12 @@ namespace CSDLGia_ASP.Controllers
                 foreach (var item in model_join)
                 {
                     result += "<tr>";
-                    result += "<td style='text-align: center'>" + item.TenDv + "</td> ";
-                    result += "<td style='text-align: center'>" + item.TenCsKd + "</td>";
-                    result += "<td style='text-align: center'>" + item.TenNghe + "</td>";
-                    result += "<td style='text-align: center'><a target='_blank' href='/KeKhaiDangKyGia/Show?&Mahs=" + item.Mahs + "'>" + item.SoQD + "</a></td>";
-                    result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.NgayQD) + "</td>";
-                    result += "<td style='text-align: center'>" + item.TenCqCq + "<br/> Ngày duyệt:" + Helpers.ConvertDateTimeToStr(item.NgayDuyet) + "</td>";
+                    result += "<td style='text-align: center'>" + item.tendn + "</td> ";
+                    result += "<td style='text-align: center'>" + item.tencskd + "</td>";
+                    result += "<td style='text-align: center'>" + item.plhs + "</td>";
+                    result += "<td style='text-align: center'><a target='_blank' href='/HoSoKeKhaiGia/Show?&Mahs=" + item.mahs + "'>" + item.socv + "</a></td>";
+                    result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.ngaynhap) + "</td>";
+                    result += "<td style='text-align: center'>" + item.cqcq + "<br/> Ngày duyệt:" + Helpers.ConvertDateToStr(item.ngaynhan) + "</td>";
                     result += "</tr>";
                 }
             }

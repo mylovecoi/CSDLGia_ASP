@@ -93,64 +93,65 @@
             <td style="text-align: right"><i style="margin-right: 25%;">@Model.Diadanh, ngày @Model.ngaynhap.</i></td>
         </tr>
     </table>
-<p style="text-align: center; font-weight: bold; font-size: 16px;">BẢNG KÊ KHAI MỨC GIÁ</p>
-<p style="text-align: center; font-style: italic">(Kèm theo công văn số @Model.socv  ngày @Model.ngaynhap của @Model.tendn</p>
-<p> - Tên cơ sở kinh doanh: @Model.tencskd</p>
-<p> - Loại hạng của cơ sở kinh doanh: </p>
-<p> - Địa chỉ: @Model.Diachi</p>
-<p> - Điện thoại: @Model.Dtll</p>
-<p>1. Mức giá kê khai bán trong nước hoặc xuất khẩu (bán buôn, bán lẻ):  Các mức giá tại cửa kho/ nhà máy, tại các địa bàn, khu vực khác (nếu có)</p>
-<table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 14px Times, serif;" id="data">
-    <thead>
-        <tr>
-            <th width="2%">STT</th>
-            <th>Tên hàng hóa, dịch vụ</th>
-            <th>Quy cách, <br>chất lượng</th>
-            <th>Số hiêu phòng<br>tính</th>
-            <th width="10%">Mức giá <br>kê khai hiện<br>hành</th>
-            <th width="10%">Mức giá <br>kê khai mới</th>
-            <th>Mức tăng giảm</th>
-            <th>Tỷ lệ % tăng giảm</th>
-            <th>Ghi chú</th>
-        </tr>
-    </thead>
-    <tbody>
-            @if (Model.ds_cths.Count() > 0)
+    <p style="text-align: center; font-weight: bold; font-size: 16px;">BẢNG KÊ KHAI MỨC GIÁ</p>
+    <p style="text-align: center; font-style: italic">(Kèm theo công văn số @Model.socv  ngày @Model.ngaynhap của @Model.tendn</p>
+    <p> - Tên cơ sở kinh doanh: @Model.tencskd</p>
+    <p> - Loại hạng của cơ sở kinh doanh: </p>
+    <p> - Địa chỉ: @Model.Diachi</p>
+    <p> - Điện thoại: @Model.Dtll</p>
+    <p>1. Mức giá kê khai bán trong nước hoặc xuất khẩu (bán buôn, bán lẻ):  Các mức giá tại cửa kho/ nhà máy, tại các địa bàn, khu vực khác (nếu có)</p>
+    <table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 14px Times, serif;" id="data">
+        <thead>
+            <tr>
+                <th width="2%">STT</th>
+                <th>Tên hàng hóa, dịch vụ</th>
+                <th>Quy cách, <br>chất lượng</th>
+                <th>Số hiêu phòng<br>tính</th>
+                <th width="10%">Mức giá <br>kê khai hiện<br>hành</th>
+                <th width="10%">Mức giá <br>kê khai mới</th>
+                <th>Mức tăng giảm</th>
+                <th>Tỷ lệ % tăng giảm</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.HoSoKeKhaiGia_ChiTiet.Count() > 0)
             {
-            @foreach (var item in Model.ds_cths)
+                @foreach (var item in Model.HoSoKeKhaiGia_ChiTiet)
                 {
-                <tr>
-                    <td style="text-align: center">@(record_id++)</td>
-                    <td>@item.loaip</td>
-                    <td>@item.qccl</td>
-                    <td style="text-align: center">@item.sohieu</td>
-                    <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgialkValue)</td>
-                    <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgiakkValue)</td>
-                    <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgiakkValue - item.mucgialkValue)</td>
-                    @if (@item.mucgiakkValue == 0)
+
+                    <tr>
+                        <td style="text-align: center">@(record_id++)</td>
+                        <td>@item.loaip</td>
+                        <td>@item.qccl</td>
+                        <td style="text-align: center">@item.sohieu</td>
+                        <td style="text-align: right">@item.mucgialk</td>
+                        <td style="text-align: right">@item.mucgiakk</td>
+                        <td style="text-align: right"></td>
+                        @if (@item.mucgiakk == "0")
                         {
-                        <td style="text-align: right">100</td>
+                            <td style="text-align: right">100%</td>
                         }
                         else
                         {
-                        <td style="text-align: right">
-                            @Helpers.ConvertDbToStr((item.mucgiakkValue - item.mucgialkValue) / item.mucgialkValue * 100) %
-                        </td>
+                            <td style="text-align: right">
+                                0%
+                            </td>
                         }
-                    <td>@item.ghichu</td>
-                </tr>
+                        <td>@item.ghichu</td>
+                    </tr>
                 }
             }
-    </tbody>
-</table>
-<p>
-    2. Phân tích nguyên nhân, nêu rõ biến động của các yếu tố hình thành giá tác động 
-    làm tăng hoặc giảm giá hàng hóa dịch vụ thực hiện kê khai giá
-</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<p>
-    3. Ghi rõ các chính sách và mức khuyến mại, giảm giá hoặc chiết khấu đối với các đối tượng khách hàng, 
-    các Điều kiện vận chuyển, giao hàng, bán hàng kèm theo mức giá kê khai (nếu có)
-</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<p>Mức giá kê khai này thực hiện từ ngày @Helpers.ConvertDateToStr(Model.ngayhieuluc??DateTime.MinValue)</p>
+        </tbody>
+    </table>
+    <p>
+        2. Phân tích nguyên nhân, nêu rõ biến động của các yếu tố hình thành giá tác động
+        làm tăng hoặc giảm giá hàng hóa dịch vụ thực hiện kê khai giá
+    </p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <p>
+        3. Ghi rõ các chính sách và mức khuyến mại, giảm giá hoặc chiết khấu đối với các đối tượng khách hàng,
+        các Điều kiện vận chuyển, giao hàng, bán hàng kèm theo mức giá kê khai (nếu có)
+    </p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <p>Mức giá kê khai này thực hiện từ ngày @Helpers.ConvertDateToStr(Model.ngayhieuluc??DateTime.MinValue)</p>

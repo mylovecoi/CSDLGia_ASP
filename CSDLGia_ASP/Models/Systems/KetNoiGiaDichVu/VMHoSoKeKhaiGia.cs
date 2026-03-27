@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using CSDLGia_ASP.Models.Manages.KeKhaiDangKyGia;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu
 {
@@ -50,5 +51,6 @@ namespace CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu
         //[BindProperty]
         //public DateTime giaycnhangcsdenngaypublic { get; set; } = DateTime.Parse("0001-01-01");
         public List<VMHoSoKeKhaiGia_ChiTiet> ds_cths { get; set;}
+        public List<HoSoKeKhaiGia_ChiTiet> HoSoKeKhaiGia_ChiTiet { get; set; }
     }
 }
