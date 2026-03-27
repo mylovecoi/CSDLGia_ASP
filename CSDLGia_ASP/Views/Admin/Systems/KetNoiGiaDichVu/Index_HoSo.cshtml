@@ -20,7 +20,7 @@
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
             <h3 class="card-label">
-                Danh sách hồ sơ kê khai giá từ phần mềm kê khai giá dịch vụ lưu trú</small>
+                Danh sách hồ sơ kê khai giá từ phần mềm kê khai giá dịch vụ lưu trú
             </h3>
         </div>
         <div class="card-toolbar">
@@ -58,6 +58,10 @@
                             <td>@item.ngayhieuluc</td>
                             <td>@item.trangthai</td>
                             <td>
+                                <a asp-controller="KetNoiGiaDichVu" asp-action="Show" asp-route-mahs="@item.mahs" class="btn btn-sm btn-clean btn-icon" title="Xem chi tiết"
+                                   target="_blank">
+                                    <i class="icon-lg la la-eye text-success"></i>
+                                </a>
                             </td>
                         </tr>
                     }

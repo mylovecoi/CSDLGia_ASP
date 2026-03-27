@@ -1,0 +1,156 @@
+﻿@{
+    Layout = "_LayoutReports";
+    var record_id = 1;
+}
+@model CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu.VMHoSoKeKhaiGia
+<p style="text-align: center; font-weight: bold">Phụ lục 4: MẪU VĂN BẢN KÊ KHAI GIÁ</p>
+<p style="font-style: italic; text-align: center">(Ban hành kèm theo Thông tư số 233/2016/TT-BTC ngày 11/11/2016 của Bộ Tài chính)</p>
+<table width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 20px; text-align: center;">
+    <tr>
+        <td width="40%" style="vertical-align: top;">
+            <span style="text-transform: uppercase;font-weight: bold">@Model.tendn</span>
+            <hr style="width: 10%;vertical-align: top;  margin-top: 2px">
+        </td>
+        <td style="vertical-align: top;">
+            <b>
+                CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br>
+                Độc lập - Tự do - Hạnh phúc
+            </b>
+            <hr style="width: 15%;vertical-align: top; margin-top: 2px">
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top;">Số: @Model.socv<br>V/v kê khai giá hàng hóa, dịch<br>vụ bán trong nước hoặc xuất<br>khẩu</td>
+        <td style="text-align: right; vertical-align: top"><i style="margin-right: 25%;">..., ngày...tháng...năm...</i></td>
+    </tr>
+</table>
+<p style="text-align: center; font-weight: bold; font-size: 16px;"><i><u>Kính gửi</u></i>: ....</p>
+<br>
+<br>
+<p>Thực hiện Thông tư số 56/2014/TT-BTC ngày 28/4/2014 của Bộ Tài chính hướng dẫn thực hiện Nghị định 177/2013/NĐ-CP ngày 14 tháng 11 năm 2013 của Chính phủ quy định chi tiết và hướng dẫn thi hành một số điều của Luật Giá và Thông tư số 233/2016/TT-BTC ngày 11/11/2016 của Bộ Tài chính sửa đổi, bổ sung một số điều của Thông tư số 56/2014/TT-BTC </p>
+
+<p><b>@Model.tendn</b> gửi Bảng kê khai mức giá hàng hoá, dịch vụ (đính kèm).</p>
+<p> - Tên cơ sở kinh doanh: @Model.tencskd</p>
+<p> - Loại hạng của cơ sở kinh doanh: @Model.loaihang</p>
+<p> - Địa chỉ: </p>
+
+<p>Mức giá kê khai này thực hiện từ ngày @Helpers.ConvertDateToStr(Model.ngayhieuluc ?? DateTime.Parse("0001-01-01"))</p>
+
+<p><b>@Model.tendn</b> xin chịu trách nhiệm trước pháp luật về tính chính xác của mức giá mà chúng tôi đã kê khai./.</p>
+
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" style="margin: 20px auto;text-align: center; height:200px">
+    <tr>
+        <td width="40%" style="text-align: left; vertical-align: top;">
+            <span style="font-weight: bold;font-style: italic">Nơi nhận:</span><br>
+            - Như trên:<br>
+            - Lưu.
+        </td>
+        <td style="vertical-align: top;">
+            <p style="text-transform: uppercase; font-weight:bold">@Model.Chucvuky</p><br>
+            <i>(Ký tên, đóng dấu)</i><br /><br /><br /><br /><br /><br />
+            <p>@Model.Nguoiky</p>
+        </td>
+    </tr>
+</table>
+<p>- Họ và tên người nộp biểu mẫu : @Model.ttnguoinop</p>
+<p>- Địa chỉ đơn vị thực hiện kê khai: @Model.Diachi</p>
+<p>- Số điện thoại liên lạc : @Model.Dtll</p>
+<p>- Email : </p>
+<p>- Số Fax : </p>
+<p style="font-weight: bold; text-align: center">Ghi nhận ngày nộp Văn bản kê khai giá <br>của cơ quan tiếp nhận</p>
+<table cellspacing="0" cellpadding="0" border="1" style="margin-top: 5px; border-collapse: collapse;width:30%">
+    <tr>
+        <td><b>@Model.Tendvhienthi</b></td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">
+            <b>Số:</b> @Model.sohsnhan<br>
+            <b>Ngày nhận hồ sơ:</b> @Helpers.ConvertDateToStr(Model.ngaychuyen)<br>
+            <b>Ngày duyệt hồ sơ:</b> @Helpers.ConvertDateToStr(Model.ngaynhan)
+        </td>
+    </tr>
+</table>
+<hr class="in">
+<p style="page-break-before: always">
+    <!--Trang2-->
+    <table width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 20px; text-align: center;">
+        <tr>
+            <td width="40%" style="vertical-align: top;">
+                <span style="text-transform: uppercase;font-weight: bold">@Model.tendn</span>
+                <hr style="width: 10%;vertical-align: top;  margin-top: 2px">
+            </td>
+            <td style="vertical-align: top;">
+                <b>
+                    CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br>
+                    Độc lập - Tự do - Hạnh phúc
+                </b>
+                <hr style="width: 15%;vertical-align: top; margin-top: 2px">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align: right"><i style="margin-right: 25%;">@Model.Diadanh, ngày @Model.ngaynhap.</i></td>
+        </tr>
+    </table>
+<p style="text-align: center; font-weight: bold; font-size: 16px;">BẢNG KÊ KHAI MỨC GIÁ</p>
+<p style="text-align: center; font-style: italic">(Kèm theo công văn số @Model.socv  ngày @Model.ngaynhap của @Model.tendn</p>
+<p> - Tên cơ sở kinh doanh: @Model.tencskd</p>
+<p> - Loại hạng của cơ sở kinh doanh: </p>
+<p> - Địa chỉ: @Model.Diachi</p>
+<p> - Điện thoại: @Model.Dtll</p>
+<p>1. Mức giá kê khai bán trong nước hoặc xuất khẩu (bán buôn, bán lẻ):  Các mức giá tại cửa kho/ nhà máy, tại các địa bàn, khu vực khác (nếu có)</p>
+<table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 14px Times, serif;" id="data">
+    <thead>
+        <tr>
+            <th width="2%">STT</th>
+            <th>Tên hàng hóa, dịch vụ</th>
+            <th>Quy cách, <br>chất lượng</th>
+            <th>Đơn vị<br>tính</th>
+            <th width="10%">Mức giá <br>kê khai hiện<br>hành</th>
+            <th width="10%">Mức giá <br>kê khai mới</th>
+            <th>Mức tăng giảm</th>
+            <th>Tỷ lệ % tăng giảm</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+            @if (Model.ds_cths.Count() > 0)
+            {
+            @foreach (var item in Model.ds_cths)
+                {
+                <tr>
+                    <td style="text-align: center">@(record_id++)</td>
+                    <td>@item.loaip</td>
+                    <td>@item.qccl</td>
+                    <td style="text-align: center"></td>
+                    <td style="text-align: right>@Helpers.ConvertDbToStr(item.mucgiakkValue)</td>
+                    <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgialkValue)</td>
+                    <td style="text-align: right">@Helpers.ConvertDbToStr(item.mucgiakkValue - item.mucgialkValue)</td>
+                    @if (@Helpers.ConvertStrToDb(item.mucgiakk) == 0)
+                        {
+                        <td style="text-align: right">100</td>
+                        }
+                        else
+                        {
+                        <td style="text-align: right">
+                            @Helpers.ConvertDbToStr((item.mucgiakkValue - item.mucgialkValue) / item.mucgialkValue * 100) %
+                        </td>
+                        }
+                    <td>@item.ghichu</td>
+                </tr>
+                }
+            }
+    </tbody>
+</table>
+<p>
+    2. Phân tích nguyên nhân, nêu rõ biến động của các yếu tố hình thành giá tác động 
+    làm tăng hoặc giảm giá hàng hóa dịch vụ thực hiện kê khai giá
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<p>
+    3. Ghi rõ các chính sách và mức khuyến mại, giảm giá hoặc chiết khấu đối với các đối tượng khách hàng, 
+    các Điều kiện vận chuyển, giao hàng, bán hàng kèm theo mức giá kê khai (nếu có)
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<p>Mức giá kê khai này thực hiện từ ngày @Helpers.ConvertDateToStr(Model.ngayhieuluc??DateTime.MinValue)</p>

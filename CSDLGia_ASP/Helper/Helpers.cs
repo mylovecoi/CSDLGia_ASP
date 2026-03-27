@@ -979,6 +979,30 @@ namespace CSDLGia_ASP.Helper
             }
         }
 
+        public static string ConvertDateToStr(string dateStr)
+        {
+            if (string.IsNullOrEmpty(dateStr))
+                return "";
+
+            if (DateTime.TryParse(dateStr, out DateTime date))
+            {
+                if (date == DateTime.MinValue)
+                    return "";
+
+                return date.ToString("dd/MM/yyyy");
+            }
+
+            return "";
+        }
+
+        public static string ConvertDateToStr(DateTime? date)
+        {
+            if (!date.HasValue || date.Value == DateTime.MinValue)
+                return "";
+
+            return date.Value.ToString("dd/MM/yyyy");
+        }
+
         public static string ConvertDateToStrAjax(DateTime date)
         {
 

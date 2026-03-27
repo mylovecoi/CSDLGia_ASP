@@ -39,6 +39,12 @@ namespace CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu
         public string soqdgiaycnhangcs { get; set; }
         public DateTime? giaycnhangcstungay { get; set; }
         public DateTime? giaycnhangcsdenngaypublic { get; set; }
+        public string Chucvuky { get; set; }
+        public string Nguoiky { get; set; }
+        public string Diachi { get; set; }
+        public string Dtll { get; set; }
+        public string Tendvhienthi { get; set; }
+        public string Diadanh { get; set; }
         //[BindProperty]
         //public DateTime giaycnhangcstungay { get; set; } = DateTime.Parse("0001-01-01");
         //[BindProperty]

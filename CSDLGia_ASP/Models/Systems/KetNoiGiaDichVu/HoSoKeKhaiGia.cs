@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu
 {
@@ -38,7 +39,7 @@ namespace CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu
         public string soqdgiaycnhangcs { get; set; }
         public DateTime? giaycnhangcstungay { get; set; }
         public DateTime? giaycnhangcsdenngaypublic { get; set; }
-
+        public List<VMHoSoKeKhaiGia_ChiTiet> ds_cths { get; set; }
 
         //public DateTime Created_at { get; set; }
         //public DateTime Updated_at { get; set; }
