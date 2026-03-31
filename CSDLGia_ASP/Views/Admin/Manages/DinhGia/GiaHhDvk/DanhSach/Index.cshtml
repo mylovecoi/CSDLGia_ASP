@@ -172,6 +172,14 @@
                                         <br />
                                         <span>Lý do:&nbsp;@item.Lydo</span>
                                     }
+                                    else if (item.Trangthai == "CHT")
+                                    {
+                                        <span class="label font-weight-bold label-lg label-inline label-light-primary">Chưa hoàn thành</span>
+                                    }
+                                    else if (item.Trangthai == "HT")
+                                    {
+                                        <span class="label font-weight-bold label-lg label-inline label-light-primary">Hoàn thành</span>
+                                    }
                                     else
                                     {
                                         <span class="label font-weight-bold label-lg label-inline label-light-success">Công bố</span>
