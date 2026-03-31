@@ -52,6 +52,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.PhiLePhi
                                      };
 
                     ViewData["Nam"] = Nam;
+                    ViewData["maKetNoiAPI"] = "";
                     ViewData["Title"] = "Hoàn thành định giá lệ phí trước bạ";
                     ViewData["MenuLv1"] = "menu_giakhac";
                     ViewData["MenuLv2"] = "menu_plp";

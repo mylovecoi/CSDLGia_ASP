@@ -76,6 +76,31 @@ namespace CSDLGia_ASP.Services
                             }
                             context.Session.SetString("Permission", JsonConvert.SerializeObject(permissions));
                             context.Session.SetString("KeKhaiDangKyGia", JsonConvert.SerializeObject(data_nghe));
+                            // Ensure API connection/session settings are populated as they are set during SignIn
+                            var heThong = _db.tblHeThong.FirstOrDefault();
+                            if (heThong != null)
+                            {
+                                context.Session.SetString("LinkAPIXacthuc", heThong.LinkAPIXacthuc ?? string.Empty);
+                                context.Session.SetString("TokenLGSP", heThong.TokenLGSP ?? string.Empty);
+                                context.Session.SetString("MaDiaBanHanhChinh", heThong.MaDiaBanHanhChinh ?? string.Empty);
+                                context.Session.SetString("MaDonViThuThap", heThong.MaDonViThuThap ?? string.Empty);
+                                context.Session.SetString("TimeOut", heThong.TimeOut ?? string.Empty);
+                            }
+
+                            var dsKetNoi = _db.KetNoiAPI_DanhSach.ToList();
+                            if (dsKetNoi != null && dsKetNoi.Any())
+                            {
+                                try
+                                {
+                                    var dict = dsKetNoi.ToDictionary(item => item.Maso, item => item);
+                                    context.Session.SetString("LinkAPIKetNoi", JsonConvert.SerializeObject(dict));
+                                }
+                                catch
+                                {
+                                    // If conversion fails, ensure session key exists as empty to avoid null usage in views
+                                    context.Session.SetString("LinkAPIKetNoi", string.Empty);
+                                }
+                            }
                         }
                     }
                     else

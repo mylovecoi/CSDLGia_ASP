@@ -9,8 +9,61 @@
     string maDonViThuThap = HttpContextAccessor.HttpContext.Session.GetString("MaDonViThuThap");
     string linkKetNoi = "";
 
+    // Kiểm tra giá trị
+    // @if (string.IsNullOrEmpty(maChucNang))
+    // {
+    //     <div>maChucnang đang NULL hoặc rỗng</div>
+    // }
+    // else
+    // {
+    //     <div>Giá trị: @maChucNang</div>
+    // }
+
+    // @if (string.IsNullOrEmpty(linkAPIXacthuc))
+    // {
+    //     <div>linkAPIXacthuc đang NULL hoặc rỗng</div>
+    // }
+    // else
+    // {
+    //     <div>Giá trị: @linkAPIXacthuc</div>
+    // }
+
+    // @if (string.IsNullOrEmpty(linkAPIKetNoi))
+    // {
+    //     <div>linkAPIKetNoi đang NULL hoặc rỗng</div>
+    // }
+    // else
+    // {
+    //     <div>Giá trị: @linkAPIKetNoi</div>
+    // }
+
+    // @if (string.IsNullOrEmpty(maDiaBanHanhChinh))
+    // {
+    //     <div>maDiaBanHanhChinh đang NULL hoặc rỗng</div>
+    // }
+    // else
+    // {
+    //     <div>Giá trị: @maDiaBanHanhChinh</div>
+    // }
+
+    // @if (string.IsNullOrEmpty(maDonViThuThap))
+    // {
+    //     <div>maDonViThuThap đang NULL hoặc rỗng</div>
+    // }
+    // else
+    // {
+    //     <div>Giá trị: @maDonViThuThap</div>
+    // }
+
     // Chuyển đổi chuỗi JSON thành một Dictionary
     //Dictionary<string, KetNoiAPI_DanhSach> dictionary = JsonConvert.DeserializeObject<Dictionary<string, KetNoiAPI_DanhSach>>(linkAPIKetNoi);
+
+    // Lấy giá trị với khóa cụ thể
+    // if (dictionary.ContainsKey(maChucNang))
+    // {
+    //     KetNoiAPI_DanhSach value = dictionary[maChucNang];
+    //     linkKetNoi = value.LinkTruyenPost;
+    // }
 
     Dictionary<string, KetNoiAPI_DanhSach> dictionary = null;
     if (!string.IsNullOrEmpty(linkAPIKetNoi))
@@ -19,13 +72,11 @@
     }
     dictionary ??= new Dictionary<string, KetNoiAPI_DanhSach>();
 
-
-    // Lấy giá trị với khóa cụ thể
-    if (dictionary.ContainsKey(maChucNang))
+    if (!string.IsNullOrEmpty(maChucNang) && dictionary.TryGetValue(maChucNang, out var value))
     {
-        KetNoiAPI_DanhSach value = dictionary[maChucNang];
-        linkKetNoi = value.LinkTruyenPost;
+        linkKetNoi = value?.LinkTruyenPost ?? string.Empty;
     }
+    
     var tokenLGSP = HttpContextAccessor.HttpContext.Session.GetString("TokenLGSP");
 }
 
