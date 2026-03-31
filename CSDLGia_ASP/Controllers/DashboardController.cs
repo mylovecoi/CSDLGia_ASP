@@ -155,8 +155,8 @@ namespace CSDLGia_ASP.Controllers
                 foreach (var item in model)
                 {
                     result += "<tr>";
-                    result += "<td style='text-align: center'>" + item.tendn + "</td> ";
-                    result += "<td style='text-align: center'>" + item.tencskd + "</td>";
+                    result += "<td>" + item.tendn + "</td> ";
+                    result += "<td>" + item.tencskd + "</td>";
                     result += "<td style='text-align: center'><a target='_blank' href='/HoSoKeKhaiGia/Show?&Mahs=" + item.mahs + "'>" + item.socv + "</a></td>";
                     result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.ngaynhap) + "</td>";
                     result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.ngaynhan) + "</td>";
