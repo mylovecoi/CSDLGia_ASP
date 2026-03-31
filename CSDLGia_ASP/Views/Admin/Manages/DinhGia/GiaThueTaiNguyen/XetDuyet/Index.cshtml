@@ -104,6 +104,16 @@
                                     <span class="label font-weight-bold label-lg label-inline label-light-success">Công bố</span>
                                 }
                             </td>
+                            <td style="text-align: center">
+                                @if (item.TrangThaiCSDLQG == "" || item.TrangThaiCSDLQG == null)
+                                {
+                                    <span class="label font-weight-bold label-lg  label-outline-warning label-inline">Chưa kết nối</span>
+                                }
+                                @if (item.TrangThaiCSDLQG == "DAKETNOI")
+                                {
+                                    <span class="label font-weight-bold label-lg  label-light-info label-inline">Đã kết nối</span>
+                                }
+                            </td>
                             <td>
                                 <a asp-controller="GiaThueTaiNguyen" asp-action="Show" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Xem chi tiết"
                                    target="_blank">
@@ -151,12 +161,15 @@
                                             <i class="icon-lg la la-times text-danger "></i>
                                         </button>
                                     }
-                                }                              
-                                <a asp-controller="TrangThaiHoSo" target="_blank" asp-action="Index" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Trạng Thái Hồ Sơ"
-                                   target="_blank">
+                                }    
+                                
+                                <a asp-controller="TrangThaiHoSo" target="_blank" asp-action="Index" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Trạng Thái Hồ Sơ">
                                     <i class="icon-lg la la-redo-alt text-danger"></i>
-
-                                </a>                              
+                                </a>    
+                                @{
+                                    ViewData["maHoSoTruyen"] = item.Mahs;
+                                }
+                                @await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_button.cshtml", ViewData["maHoSoTruyen"])
                             </td>
                         </tr>
                     }
@@ -167,3 +180,4 @@
 </div>
 @await Html.PartialAsync("~/Views/Admin/Manages/DinhGia/GiaThueTaiNguyen/XetDuyet/Modal.cshtml")
 @await Html.PartialAsync("~/Views/Admin/Manages/DinhGia/GiaThueTaiNguyen/ThongTinGiayTo/Show.cshtml")
+@await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_modal.cshtml")

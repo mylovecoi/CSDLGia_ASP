@@ -154,45 +154,9 @@
                                         </button>
                                     }
                                 }
-
-                                <a asp-controller="TrangThaiHoSo" target="_blank" asp-action="Index" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Trạng Thái Hồ Sơ"
-                                   target="_blank">
+                                <a asp-controller="TrangThaiHoSo" target="_blank" asp-action="Index" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Trạng Thái Hồ Sơ">
                                     <i class="icon-lg la la-redo-alt text-danger"></i>
                                 </a>
-                                <div class="dropdown dropdown-inline">
-                                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" aria-expanded="false" title="Truyền lên CSDLGQG">
-                                        <i class="icon-lg la la-cog "></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" style="">
-                                        <ul class="nav nav-hoverable flex-column">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#">
-                                                    <i class="nav-icon la la-forward"></i>
-                                                    <span class="nav-text">Thiết lập thông điệp</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#">
-                                                    <i class="nav-icon la la-forward"></i>
-                                                    <span class="nav-text">Cấu hình công khai dữ liệu </span>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#">
-                                                    <i class="nav-icon la la-forward"></i>
-                                                    <span class="nav-text">Xem trước thông điệp</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#">
-                                                    <i class="nav-icon la la-forward"></i>
-                                                    <span class="nav-text">Truyền dữ liệu</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </td>
                         </tr>
                     }

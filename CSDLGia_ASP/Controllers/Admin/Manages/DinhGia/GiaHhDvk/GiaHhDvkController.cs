@@ -863,7 +863,6 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaHhDvk
                         Thoidiem = DateTime.Now,
                         Thoidiemlk = DateTime.Now,
                         Trangthai = "CHT",
-
                     };
 
                     var dmHangHoa = _db.GiaHhDvkDm.Where(x => x.Matt == MattTh && x.Theodoi == "TD");

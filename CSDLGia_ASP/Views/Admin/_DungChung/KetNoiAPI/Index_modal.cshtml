@@ -10,7 +10,15 @@
     string linkKetNoi = "";
 
     // Chuyển đổi chuỗi JSON thành một Dictionary
-    Dictionary<string, KetNoiAPI_DanhSach> dictionary = JsonConvert.DeserializeObject<Dictionary<string, KetNoiAPI_DanhSach>>(linkAPIKetNoi);
+    //Dictionary<string, KetNoiAPI_DanhSach> dictionary = JsonConvert.DeserializeObject<Dictionary<string, KetNoiAPI_DanhSach>>(linkAPIKetNoi);
+
+    Dictionary<string, KetNoiAPI_DanhSach> dictionary = null;
+    if (!string.IsNullOrEmpty(linkAPIKetNoi))
+    {
+        dictionary = JsonConvert.DeserializeObject<Dictionary<string, KetNoiAPI_DanhSach>>(linkAPIKetNoi);
+    }
+    dictionary ??= new Dictionary<string, KetNoiAPI_DanhSach>();
+
 
     // Lấy giá trị với khóa cụ thể
     if (dictionary.ContainsKey(maChucNang))

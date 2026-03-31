@@ -144,7 +144,6 @@ namespace CSDLGia_ASP.Controllers
             result += "<tr class='text-center text-uppercase'>";
             result += "<th>Tên doanh nghiệp</th>";
             result += "<th>Tên cơ sở kinh doanh</th>";
-            result += "<th width='10%'>Phân loại</th>";
             result += "<th width='10%'>Số QĐ</th> ";
             result += "<th width='10%'>Thời điểm</th> ";
             result += "<th>Thời gian tiếp nhận hồ sơ</th>";
@@ -158,7 +157,6 @@ namespace CSDLGia_ASP.Controllers
                     result += "<tr>";
                     result += "<td style='text-align: center'>" + item.tendn + "</td> ";
                     result += "<td style='text-align: center'>" + item.tencskd + "</td>";
-                    result += "<td style='text-align: center'>" + item.plhs + "</td>";
                     result += "<td style='text-align: center'><a target='_blank' href='/HoSoKeKhaiGia/Show?&Mahs=" + item.mahs + "'>" + item.socv + "</a></td>";
                     result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.ngaynhap) + "</td>";
                     result += "<td style='text-align: center'>" + Helpers.ConvertDateToStr(item.ngaynhan) + "</td>";

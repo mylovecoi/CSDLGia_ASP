@@ -109,6 +109,7 @@
                     <th>Số báo cáo</th>
                     <th>Nội dung báo cáo</th>
                     <th>Trạng thái</th>
+                    <th>Trạng thái CSDL<br /> Giá Quốc Gia</th>
                     <th width="20%">Thao tác</th>
                 </tr>
             </thead>
@@ -150,6 +151,16 @@
                                     <span class="label font-weight-bold label-lg  label-light-warning label-inline">Chưa công bố</span>
                                 }
                             </td>
+                            <td style="text-align: center">
+                                @if (item.TrangThaiCSDLQG == "" || item.TrangThaiCSDLQG == null)
+                                {
+                                    <span class="label font-weight-bold label-lg  label-outline-warning label-inline">Chưa kết nối</span>
+                                }
+                                @if (item.TrangThaiCSDLQG == "DAKETNOI")
+                                {
+                                    <span class="label font-weight-bold label-lg  label-light-info label-inline">Đã kết nối</span>
+                                }
+                            </td>
                             <td>
                                 <a asp-controller="GiaHhDvkTh" asp-action="Show" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Xem chi tiết"
                                    target="_blank">
@@ -169,7 +180,12 @@
                                             <i class="icon-lg la la-trash text-danger"></i>
                                         </button>
                                     }
-                                }                               
+                                }      
+                                @{
+                                    ViewData["maHoSoTruyen"] = item.Mahs;
+                                }
+                                @await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_button.cshtml", ViewData["maHoSoTruyen"])
+                                
                             </td>
                         </tr>
                     }
@@ -179,3 +195,4 @@
     </div>
 </div>
 @await Html.PartialAsync("~/Views/Admin/Manages/DinhGia/GiaHhDvk/TongHop/Modal.cshtml")
+@await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_modal.cshtml")
