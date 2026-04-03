@@ -18,14 +18,14 @@
     <script src="~/Admin/assets/datatables/scripts/table-managed.js"></script>
     <script src="~/Admin/assets/js/pages/crud/forms/widgets/select2.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             TableManaged.init();
             TableManaged2.init();
             $('.select2multi').select2();
         });
 
-        $(function () {
-            $('#Nam, #Madv').change(function () {
+        $(function() {
+            $('#Nam, #Madv').change(function() {
                 var current_path_url = '/ThamDinhGia/DanhSach?';
                 var nam = '&Nam=' + $('#Nam').val();
                 var madv = '&Madv=' + $('#Madv').val();
@@ -51,7 +51,7 @@
                 </button>
                 <span>&ensp;</span>
                 <a class="btn btn-success font-weight-bolder" asp-controller="ThamDinhGiaExcel" asp-action="Index"
-                   asp-route-Madv="@ViewData["Madv"]">
+                       asp-route-Madv="@ViewData["Madv"]">
                     <i class="la la-file-excel-o"></i>Nhận dữ liệu
                 </a>
             }
@@ -81,6 +81,7 @@
                 <div class="form-group fv-plugins-icon-container">
                     <label style="font-weight:bold; color:blue">Đơn vị</label>
                     <select class="form-control select2basic" id="Madv" name="Madv">
+                        <option value="all">--Tất cả--</option>
                         @foreach (var item in dsdonvi)
                         {
                             <!option value="@item.MaDv" @((string)ViewData["Madv"] == item.MaDv ? "selected" : "")>&emsp;@item.TenDv</!option>
@@ -114,64 +115,71 @@
                             <td>@item.Tennhomhh</td>
                             <td>@item.Dvyeucau</td>
                             <td style="text-align: center">
-                                @if (item.Trangthai == "CHT")
+                                @if (item.Trangthai == "CC")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-outline-warning label-inline">Chưa hoàn thành</span>
+                                    <span class="label font-weight-bold label-lg label-xl label-light-info label-inline">Chờ chuyển</span>
                                 }
-                                @if (item.Trangthai == "HHT")
+                                else if (item.Trangthai == "CD")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-outline-danger label-inline">Hủy hoàn thành</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-warning">Chờ duyệt</span>
                                 }
-                                @if (item.Trangthai == "HT")
+                                else if (item.Trangthai == "DD")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-info label-inline">Hoàn thành</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-primary">Đã duyệt</span>
                                 }
-                                @if (item.Trangthai == "CB")
+                                else if (item.Trangthai == "BTL")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-success label-inline">Công bố</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-danger">Bị trả lại</span>
+
+                                    <br />
+                                    <span>Lý do:&nbsp;@item.Lydo</span>
                                 }
-                                @if (item.Trangthai == "HCB")
+                                else if (item.Trangthai == "CHT")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-danger label-inline">Hủy công bố</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-primary">Chưa hoàn thành</span>
                                 }
-                                @if (item.Trangthai == "CCB")
+                                else if (item.Trangthai == "HT")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-warning label-inline">Chưa công bố</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-primary">Hoàn thành</span>
+                                }
+                                else
+                                {
+                                    <span class="label font-weight-bold label-lg label-inline label-light-success">Công bố</span>
                                 }
                             </td>
                             <td style="text-align: left">@item.Tencqcq</td>
                             <td>
                                 <a asp-controller="ThamDinhGia" asp-action="Show" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Xem chi tiết"
-                                   target="_blank">
+                                       target="_blank">
                                     <i class="icon-lg la la-eye text-success"></i>
                                 </a>
                                 <button type="button" onclick="GetFile('@item.Mahs')" class="btn btn-sm btn-clean btn-icon" title="Giấy tờ kèm theo">
                                     <i class="icon-lg la la-file-alt text-dark"></i>
                                 </button>
-                                @if (item.Trangthai == "CHT" || item.Trangthai == "HHT")
+                                @if (item.Trangthai == "CC" || item.Trangthai == "BTL")
                                 {
                                     @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.tt", "Edit"))
                                     {
                                         <a asp-controller="ThamDinhGia" asp-action="Edit" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Chỉnh sửa">
                                             <i class="icon-lg la la-edit text-primary"></i>
                                         </a>
-                                    }
-                                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.tt", "Edit"))
-                                    {
                                         <a asp-controller="ThamDinhGia" asp-action="EditHoiDong" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Hội đồng thẩm định giá">
                                             <i class="icon-lg la flaticon-user text-primary"></i>
                                         </a>
                                     }
+                                    <button type="button" class="btn btn-sm btn-clean btn-icon" title="Hoàn thành" data-toggle="modal" data-target="#Chuyen_Modal" onclick="Chuyen('@item.Mahs')">
+                                        <i class="icon-lg la la-check text-primary "></i>
+                                    </button>
                                     @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.tt", "Delete"))
                                     {
                                         <button type="button" class="btn btn-sm btn-clean btn-icon" title="Xóa" data-toggle="modal" data-target="#Delete_Modal" onclick="SetDelete('@item.Id')">
                                             <i class="icon-lg la la-trash text-danger"></i>
                                         </button>
                                     }
-                                    <button type="button" class="btn btn-sm btn-clean btn-icon" title="Hoàn thành" data-toggle="modal" data-target="#Chuyen_Modal" onclick="Chuyen('@item.Mahs')">
-                                        <i class="icon-lg la la-check text-primary "></i>
-                                    </button>
                                 }
+                                <a asp-controller="TrangThaiHoSo" target="_blank" asp-action="Index" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Trạng Thái Hồ Sơ">
+                                    <i class="icon-lg la la-redo-alt text-danger"></i>
+                                </a>
 
                             </td>
                         </tr>
@@ -295,12 +303,17 @@
                     <p style="color:blue">Hồ sơ đã hoàn thành sẽ được chuyển lên đơn vị tiếp nhận. Bạn cần liên hệ đơn vị tiếp nhận để chỉnh sửa hồ sơ nếu cần!</p>
                     <div class="row">
                         <div class="col-xl-12">
-                            <div class="form-group fv-plugins-icon-container">
-                                <label>Cơ quan tiếp nhận*</label>
-                                <select class="form-control" id="macqcq_chuyen" name="macqcq_chuyen">
-                                    @foreach (var item in dsdonvith)
+                            <div class="form-group">
+                                <label class="control-label">Hồ sơ:</label>
+                                <select class="form-control" id="trangthai_complete" name="trangthai_complete">
+                                    <option value="CD">Chờ duyệt</option>
+                                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.xd", "Approve"))
                                     {
-                                        <!option value="@item.MaDv">@item.TenDv</!option>
+                                        <option value="DD">Đã duyệt</option>
+                                    }
+                                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.xd", "Approve"))
+                                    {
+                                        <option value="CB">Công bố</option>
                                     }
                                 </select>
                             </div>
@@ -355,7 +368,7 @@
                 Mahs: mahs
             },
             dataType: 'JSON',
-            success: function (data) {
+            success: function(data) {
                 if (data.status == 'success') {
                     $('#giayto_data').replaceWith(data.message);
                     toastr.success("Cập nhật thành công!!!", "Thành công!");

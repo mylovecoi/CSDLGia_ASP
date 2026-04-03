@@ -1,25 +1,57 @@
-﻿@{
-    var dsdiaban = (IEnumerable<DsDiaBan>)ViewData["DsDiaBan"];
-    var dsdonvi = (IEnumerable<DsDonVi>)ViewData["DsDonVi"];
-}
-<!--Trả lại Modal-->
+﻿<!--Trả lại Modal-->
 <div class="modal fade" id="TraLai_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form asp-controller="ThamDinhGiaXd" asp-action="TraLai" id="frm_tralai">
+        <form asp-controller="ThamDinhGiaXd" asp-action="TraLai" id="frm_tralai" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="card-label">
-                        Đồng ý trả lại hồ sơ?
+                        Lý do trả lại hồ sơ*
                     </h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i aria-hidden="true" class="ki ki-close"></i>
-                    </button>
+
                 </div>
                 <div class="modal-body">
-                    <p style="color: blue">Hồ sơ Bị hủy sẽ chuyển lại cho cơ quan nhập chủ quản có thể chỉnh sửa hồ sơ!</p>
+                    <p style="color: blue">Hồ sơ bị sẽ chuyển lại cho cơ quan gửi lên để có thể chỉnh sửa hồ sơ!</p>
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="form-group fv-plugins-icon-container">
+                                <textarea class="form-control" id="Lydo" name="Lydo" cols="12" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
                     <input hidden id="id_tralai" name="id_tralai" />
-                    <input hidden id="madv_tralai" name="madv_tralai" />
                 </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Hủy thao tác</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Trả lại</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--Duyet Modal-->
+<div class="modal fade" id="Duyet_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-controller="ThamDinhGiaXd" asp-action="Duyet" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="card-label">
+                        Đồng ý duyệt hồ sơ
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="form-group fv-plugins-icon-container">
+                                <label>Số quyết định</label>
+                                <label class="form-control" id="soqd_duyet" name="soqd_duyet"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <input hidden id="mahs_duyet" name="mahs_duyet" />
+                </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Hủy thao tác</button>
                     <button type="submit" class="btn btn-primary font-weight-bold">Đồng ý</button>
@@ -29,10 +61,41 @@
     </div>
 </div>
 
+<!--Hủy Duyet Modal-->
+<div class="modal fade" id="HuyDuyet_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-controller="ThamDinhGiaXd" asp-action="HuyDuyet" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="card-label">
+                        Đồng ý hủy duyệt hồ sơ
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="form-group fv-plugins-icon-container">
+                                <label>Số quyết định</label>
+                                <label class="form-control" id="soqd_huyduyet" name="soqd_huyduyet"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <input hidden id="mahs_huyduyet" name="mahs_huyduyet" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Hủy thao tác</button>
+                    <button type="submit" class="btn btn-danger font-weight-bold">Đồng ý</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!--Cong Bo Modal-->
 <div class="modal fade" id="CongBo_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form asp-controller="ThamDinhGiaXd" asp-action="CongBo">
+        <form asp-controller="ThamDinhGiaXd" asp-action="CongBo" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="card-label">
@@ -43,7 +106,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input hidden id="mahs_cb" name="mahs_cb" />
+                    <input id="mahs_cb" name="mahs_cb" type="hidden" />
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="form-group fv-plugins-icon-container">
+                                <label>Số quyết định</label>
+                                <label class="form-control" id="soqd_cb" name="soqd_cb"></label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Hủy thao tác</button>
@@ -57,7 +129,7 @@
 <!--Huy Cong Bo Modal-->
 <div class="modal fade" id="HuyCongBo_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form asp-controller="ThamDinhGiaXd" asp-action="HuyCongBo">
+        <form asp-controller="ThamDinhGiaXd" asp-action="HuyCongBo" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="card-label">
@@ -68,7 +140,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input hidden id="mahs_hcb" name="mahs_hcb" />
+                    <input id="mahs_hcb" name="mahs_hcb" type="hidden" />
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="form-group fv-plugins-icon-container">
+                                <label>Số quyết định</label>
+                                <label class="form-control" id="soqd_hcb" name="soqd_hcb"></label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Hủy thao tác</button>
@@ -79,60 +159,36 @@
     </div>
 </div>
 
-<!-- Giấy tờ Modal-->
-<div class="modal fade" id="GiayTo_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="card-label">
-                    @ViewData["Title"]
-                    <span class="d-block text-muted pt-2 font-size-sm">
-                        Thông tin giấy tờ đính kèm hồ sơ giá lệ phí trước bạ
-                    </span>
-                </h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body" id="giayto_data">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
-    function TraLai(id, madv) {
+    function SetDuyet(mahs, soqd) {
+        document.getElementById("mahs_duyet").value = mahs;
+        document.getElementById("soqd_duyet").innerHTML = soqd;
+    }
+    function SetHuyDuyet(mahs, soqd) {
+        document.getElementById("mahs_huyduyet").value = mahs;
+        document.getElementById("soqd_huyduyet").innerHTML = soqd;
+    }
+    function TraLai(id) {
         document.getElementById("id_tralai").value = id;
-        document.getElementById("madv_tralai").value = madv;
+    }
+    function CongBo(mahs, soqd) {
+        document.getElementById("mahs_cb").value = mahs;
+        document.getElementById("soqd_cb").innerHTML = soqd;
+    }
+    function HuyCongBo(mahs, soqd) {
+        document.getElementById("mahs_hcb").value = mahs;
+        document.getElementById("soqd_hcb").innerHTML = soqd;
     }
 
-    function CongBo(mahs_cb) {
-        document.getElementById("mahs_cb").value = mahs_cb;
-    }
-
-    function HuyCongBo(mahs_hcb) {
-        document.getElementById("mahs_hcb").value = mahs_hcb;
-    }
-    function GetFile(mahs) {
-        $.ajax({
-            url: '/ThongTinGiayTo/GetList',
-            type: 'POST',
-            data: {
-                Mahs: mahs
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.status == 'success') {
-                    $('#giayto_data').replaceWith(data.message);
-                    toastr.success("Cập nhật thành công!!!", "Thành công!");
-                    $('#GiayTo_Modal').modal("show");
-                } else {
-                    toastr.error(data.message, "Lỗi!");
-                }
+    function ValidateXetDuyet() {
+        if ($('#Sohsnhan').val() == '') {
+            toastr.error("Số hồ sơ nhận không được để trống!", "Lỗi!!!")
+        } else {
+            if ($('#Ngaynhan').val() == '') {
+                toastr.error("Ngày duyệt hồ sơ không được để trống!", "Lỗi!!!")
+            } else {
+                document.getElementById("frm_xetduyet").submit();
             }
-        })
+        }
     }
 </script>

@@ -1,7 +1,6 @@
 ﻿@{
     int record_id = 1;
-    var dsdiaban = (IEnumerable<DsDiaBan>)ViewData["DsDiaBan"];
-    var dsdonvi = (IEnumerable<DsDonVi>)ViewData["DsDonVi"];
+    int Nam = ViewData["Nam"] as int? ?? 0;
 }
 @model IEnumerable<CSDLGia_ASP.Models.Manages.ThamDinhGia.ThamDinhGia>
 
@@ -49,33 +48,14 @@
                 <div class="form-group fv-plugins-icon-container">
                     <label style="font-weight:bold; color:blue">Năm</label>
                     <select class="form-control select2basic" id="Nam" name="Nam">
-                        <option value="all">--Tất cả--</option>
+                        <option value="0">--Tất cả--</option>
                         @{
-                            var nam_start = DateTime.Now.Year - 5;
-                            var nam_stop = DateTime.Now.Year + 1;
-                            for (var i = nam_start; i <= nam_stop; i++)
+                            int nam_start = DateTime.Now.Year - 5;
+                            int nam_stop = DateTime.Now.Year + 1;
+                            for (int i = nam_start; i <= nam_stop; i++)
                             {
-                                <!option value="@i" @((string)ViewData["Nam"] == Helpers.ConvertYearToStr(i) ? "selected" : "")>Năm @i</!option>
+                                <!option value="@i" @(Nam == i ? "selected" : "")>Năm @i</!option>
                             }
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="col-xl-3">
-                <div class="form-group fv-plugins-icon-container">
-                    <label style="font-weight:bold; color:blue">Đơn vị</label>
-                    <select class="form-control select2basic" id="Madv" name="Madv">
-                        @foreach (var db in dsdiaban.Where(t => t.Level != "H"))
-                        {
-                            <optgroup label="@db.TenDiaBan">
-                                @{
-                                    var dv = dsdonvi.Where(t => t.MaDiaBan == db.MaDiaBan && t.ChucNang != "QUANTRI");
-                                }
-                                @foreach (var item in dv)
-                                {
-                                    <!option value="@item.MaDv" @((string)ViewData["Madv"] == item.MaDv ? "selected" : "")>@item.TenDv</!option>
-                                }
-                            </optgroup>
                         }
                     </select>
                 </div>
@@ -91,6 +71,7 @@
                     <th>Đơn vị yêu cầu thẩm định</th>
                     <th>Thông tin hồ sơ</th>
                     <th>Trạng thái</th>
+                    <th>Trạng thái CSDL<br /> Giá Quốc Gia</th>
                     <th>Cơ quan tiếp nhận hồ sơ</th>
                     <th width="15%">Thao tác</th>
                 </tr>
@@ -108,29 +89,32 @@
                             <td>@item.Dvyeucau</td>
                             <td>@item.Ghichu</td>
                             <td style="text-align: center">
-                                @if (item.Trangthai == "CHT")
+                                @if (item.Trangthai == "CD")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-outline-warning label-inline">Chưa hoàn thành</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-warning">Chờ duyệt</span>
                                 }
-                                @if (item.Trangthai == "HHT")
+                                else if (item.Trangthai == "DD")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-outline-danger label-inline">Hủy hoàn thành</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-primary">Đã duyệt</span>
                                 }
-                                @if (item.Trangthai == "HT")
+                                else if (item.Trangthai == "BTL")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-info label-inline">Hoàn thành</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-danger">Bị trả lại</span>
+                                    <p>Lý do:&nbsp;@item.Lydo</p>
                                 }
-                                @if (item.Trangthai == "CB")
+                                else
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-success label-inline">Công bố</span>
+                                    <span class="label font-weight-bold label-lg label-inline label-light-success">Công bố</span>
                                 }
-                                @if (item.Trangthai == "HCB")
+                            </td>
+                            <td style="text-align: center">
+                                @if (item.TrangThaiCSDLQG == "" || item.TrangThaiCSDLQG == null)
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-danger label-inline">Hủy công bố</span>
+                                    <span class="label font-weight-bold label-lg  label-outline-warning label-inline">Chưa kết nối</span>
                                 }
-                                @if (item.Trangthai == "CCB")
+                                @if (item.TrangThaiCSDLQG == "DAKETNOI")
                                 {
-                                    <span class="label font-weight-bold label-lg  label-light-warning label-inline">Chưa công bố</span>
+                                    <span class="label font-weight-bold label-lg  label-light-info label-inline">Đã kết nối</span>
                                 }
                             </td>
                             <td style="text-align: left">@item.Tencqcq</td>
@@ -142,34 +126,50 @@
                                 <button type="button" onclick="GetFile('@item.Mahs')" class="btn btn-sm btn-clean btn-icon" title="Giấy tờ kèm theo">
                                     <i class="icon-lg la la-file-alt text-dark"></i>
                                 </button>
-                                @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.xd", "Approve"))
+                                @if (item.Trangthai == "CD")
                                 {
-                                    @if (item.Level == "ADMIN")
+                                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.xd", "Approve"))
                                     {
-                                        @if (item.Trangthai == "CB")
-                                        {
-                                            <button type="button" class="btn btn-sm btn-clean btn-icon" title="Hủy công bố" data-toggle="modal" data-target="#HuyCongBo_Modal"
-                                                    onclick="HuyCongBo('@item.Mahs')">
-                                                <i class="icon-lg la la-times text-danger "></i>
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-sm btn-clean btn-icon" title="Công bố" data-toggle="modal" data-target="#CongBo_Modal"
-                                                    onclick="CongBo('@item.Mahs')">
-                                                <i class="icon-lg la la-send text-primary "></i>
-                                            </button>
-
-                                            <button type="button" class="btn btn-sm btn-clean btn-icon" title="Trả lại" data-toggle="modal" data-target="#TraLai_Modal"
-                                                    onclick="TraLai('@item.Id', '@item.Macqcq')">
-                                                <i class="icon-lg la la-reply text-danger "></i>
-                                            </button>
-                                        }
+                                        <button type="submit" class="btn btn-sm btn-clean btn-icon" title="Trả lại" data-toggle="modal" data-target="#TraLai_Modal"
+                                                onclick="TraLai('@item.Id')">
+                                            <i class="icon-lg la la-reply text-danger "></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-clean btn-icon" title="Duyệt" data-toggle="modal" data-target="#Duyet_Modal" onclick="SetDuyet('@item.Mahs', '@item.Sotbkl')">
+                                            <i class="icon-lg la la-check text-primary"></i>
+                                        </button>
                                     }
-
-                                    ViewData["maHoSoTruyen"] = item.Mahs;
-                                    // @await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_button.cshtml", ViewData["maHoSoTruyen"])
                                 }
+                                @if (item.Trangthai == "DD")
+                                {
+                                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.xd", "Approve"))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-clean btn-icon" title="Hủy duyệt" data-toggle="modal" data-target="#HuyDuyet_Modal"
+                                                onclick="SetHuyDuyet('@item.Mahs','@item.Sotbkl')">
+                                            <i class="icon-lg la la-times text-danger "></i>
+                                        </button>
+                                    }
+                                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.xd", "Approve"))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-clean btn-icon" title="Công bố" data-toggle="modal" data-target="#CongBo_Modal"
+                                                onclick="CongBo('@item.Mahs','@item.Sotbkl')">
+                                            <i class="icon-lg la la-send text-primary "></i>
+                                        </button>
+                                    }
+                                }
+                                @if (item.Trangthai == "CB")
+                                {
+                                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.xd", "Approve"))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-clean btn-icon" title="Hủy công bố" data-toggle="modal" data-target="#HuyCongBo_Modal"
+                                                onclick="HuyCongBo('@item.Mahs', '@item.Sotbkl')">
+                                            <i class="icon-lg la la-times text-danger "></i>
+                                        </button>
+                                    }
+                                }
+                                @{
+                                    ViewData["maHoSoTruyen"] = item.Mahs;
+                                }
+                                @await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_button.cshtml", ViewData["maHoSoTruyen"])
                             </td>
                         </tr>
                     }
@@ -179,3 +179,4 @@
     </div>
 </div>
 @await Html.PartialAsync("~/Views/Admin/Manages/ThamDinhGia/XetDuyet/Modal.cshtml")
+@await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_modal.cshtml")

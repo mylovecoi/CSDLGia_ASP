@@ -250,33 +250,6 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaThueTaiNguyen
             }
         }
 
-        private static string GetMadvChuyen(string macqcq, CSDLGia_ASP.Models.Manages.DinhGia.GiaThueTaiNguyen hoso)
-        {
-            string madv = "";
-            if (macqcq == hoso.Macqcq)
-            {
-                madv = hoso.Madv;
-                goto ketthuc;
-            }
-            if (macqcq == hoso.Macqcq_h)
-            {
-                madv = hoso.Madv_h;
-                goto ketthuc;
-            }
-            if (macqcq == hoso.Macqcq_t)
-            {
-                madv = hoso.Madv_t;
-                goto ketthuc;
-            }
-            if (macqcq == hoso.Macqcq_ad)
-            {
-                madv = hoso.Madv_ad;
-                goto ketthuc;
-            }
-        ketthuc:
-            return madv;
-        }
-
 
     }
 }

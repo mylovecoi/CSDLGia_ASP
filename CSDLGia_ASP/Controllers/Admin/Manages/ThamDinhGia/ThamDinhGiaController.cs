@@ -21,12 +21,14 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
         private readonly CSDLGiaDBContext _db;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IDsDonviService _dsDonviService;
+        private readonly ITrangThaiHoSoService _trangThaiHoSoService;
 
-        public ThamDinhGiaController(CSDLGiaDBContext db, IWebHostEnvironment hostEnvironment, IDsDonviService dsDonviService)
+        public ThamDinhGiaController(CSDLGiaDBContext db, IWebHostEnvironment hostEnvironment, IDsDonviService dsDonviService, ITrangThaiHoSoService trangThaiHoSoService)
         {
             _db = db;
             _hostEnvironment = hostEnvironment;
             _dsDonviService = dsDonviService;
+            _trangThaiHoSoService = trangThaiHoSoService;
         }
 
         [Route("ThamDinhGia/DanhSach")]
@@ -635,51 +637,85 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
             }
         }
 
+        //[Route("ThamDinhGia/DanhSach/Complete")]
+        //[HttpPost]
+        //public IActionResult Complete(string mahs_chuyen, string macqcq_chuyen)
+        //{
+        //    if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
+        //    {
+        //        if (Helpers.CheckPermission(HttpContext.Session, "csdltdg.tdg.tt", "Index"))
+        //        {
+        //            var model = _db.ThamDinhGia.FirstOrDefault(t => t.Mahs == mahs_chuyen);
+
+        //            var dvcq_join = from dvcq in _db.DsDonVi
+        //                            join db in _db.DsDiaBan on dvcq.MaDiaBan equals db.MaDiaBan
+        //                            select new VMDsDonVi
+        //                            {
+        //                                Id = dvcq.Id,
+        //                                MaDiaBan = dvcq.MaDiaBan,
+        //                                MaDv = dvcq.MaDv,
+        //                                TenDv = dvcq.TenDv,
+        //                                Level = db.Level,
+        //                            };
+        //            var chk_dvcq = dvcq_join.FirstOrDefault(t => t.MaDv == macqcq_chuyen);
+        //            model.Macqcq = macqcq_chuyen;
+        //            model.Trangthai = "HT";
+        //            if (chk_dvcq != null && chk_dvcq.Level == "T")
+        //            {
+        //                model.Madv_t = macqcq_chuyen;
+        //                model.Thoidiem_t = DateTime.Now;
+        //                model.Trangthai_t = "CHT";
+        //            }
+        //            else if (chk_dvcq != null && chk_dvcq.Level == "ADMIN")
+        //            {
+        //                model.Madv_ad = macqcq_chuyen;
+        //                model.Thoidiem_ad = DateTime.Now;
+        //                model.Trangthai_ad = "CHT";
+        //            }
+        //            else
+        //            {
+        //                model.Madv_h = macqcq_chuyen;
+        //                model.Thoidiem_h = DateTime.Now;
+        //                model.Trangthai_h = "CHT";
+        //            }
+        //            _db.ThamDinhGia.Update(model);
+        //            _db.SaveChanges();
+
+        //            return RedirectToAction("Index", "ThamDinhGia", new { model.Madv });
+
+        //        }
+        //        else
+        //        {
+        //            ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
+        //            return View("Views/Admin/Error/Page.cshtml");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return View("Views/Admin/Error/SessionOut.cshtml");
+        //    }
+        //}
+
         [Route("ThamDinhGia/DanhSach/Complete")]
         [HttpPost]
-        public IActionResult Complete(string mahs_chuyen, string macqcq_chuyen)
+        public IActionResult Complete(string mahs_chuyen, string trangthai_complete)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
             {
                 if (Helpers.CheckPermission(HttpContext.Session, "csdltdg.tdg.tt", "Index"))
                 {
                     var model = _db.ThamDinhGia.FirstOrDefault(t => t.Mahs == mahs_chuyen);
+                    model.Updated_at = DateTime.Now;
+                    model.Trangthai = trangthai_complete;
 
-                    var dvcq_join = from dvcq in _db.DsDonVi
-                                    join db in _db.DsDiaBan on dvcq.MaDiaBan equals db.MaDiaBan
-                                    select new VMDsDonVi
-                                    {
-                                        Id = dvcq.Id,
-                                        MaDiaBan = dvcq.MaDiaBan,
-                                        MaDv = dvcq.MaDv,
-                                        TenDv = dvcq.TenDv,
-                                        Level = db.Level,
-                                    };
-                    var chk_dvcq = dvcq_join.FirstOrDefault(t => t.MaDv == macqcq_chuyen);
-                    model.Macqcq = macqcq_chuyen;
-                    model.Trangthai = "HT";
-                    if (chk_dvcq != null && chk_dvcq.Level == "T")
-                    {
-                        model.Madv_t = macqcq_chuyen;
-                        model.Thoidiem_t = DateTime.Now;
-                        model.Trangthai_t = "CHT";
-                    }
-                    else if (chk_dvcq != null && chk_dvcq.Level == "ADMIN")
-                    {
-                        model.Madv_ad = macqcq_chuyen;
-                        model.Thoidiem_ad = DateTime.Now;
-                        model.Trangthai_ad = "CHT";
-                    }
-                    else
-                    {
-                        model.Madv_h = macqcq_chuyen;
-                        model.Thoidiem_h = DateTime.Now;
-                        model.Trangthai_h = "CHT";
-                    }
                     _db.ThamDinhGia.Update(model);
                     _db.SaveChanges();
+                    //Add Log
+                    _trangThaiHoSoService.LogHoSo(model.Mahs, Helpers.GetSsAdmin(HttpContext.Session, "Name"), trangthai_complete);
 
-                    return RedirectToAction("Index", "ThamDinhGia", new { model.Madv });
+
+
+                    return RedirectToAction("Index", "ThamDinhGia", new { model.Madv, Nam = model.Thoidiem.Year });
 
                 }
                 else
