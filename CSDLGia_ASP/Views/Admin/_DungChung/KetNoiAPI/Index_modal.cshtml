@@ -2,7 +2,7 @@
 @using CSDLGia_ASP.Models.Systems.API
 @using Newtonsoft.Json;
 @{
-    string maChucNang = (string)ViewData["maKetNoiAPI"];
+    string maChucNang = (string)ViewData["maKetNoiAPI"] ?? "";
     var linkAPIXacthuc = HttpContextAccessor.HttpContext.Session.GetString("LinkAPIXacthuc");
     string linkAPIKetNoi = HttpContextAccessor.HttpContext.Session.GetString("LinkAPIKetNoi");
     string maDiaBanHanhChinh = HttpContextAccessor.HttpContext.Session.GetString("MaDiaBanHanhChinh");

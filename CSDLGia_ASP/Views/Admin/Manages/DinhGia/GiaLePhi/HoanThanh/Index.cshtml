@@ -76,6 +76,7 @@
                     <th width="10">Thời điểm</th>
                     <th>Mô tả</th>
                     <th width="10%">Trạng thái</th>
+                    <th>Trạng thái CSDL<br /> Giá Quốc Gia</th>
                     <th width="20%">Thao tác</th>
                 </tr>
             </thead>
@@ -108,9 +109,11 @@
                                 <span class="label font-weight-bold label-lg label-inline label-light-success">Công bố</span>
                             }
                         </td>
+                        <td style="text-align: center">
+                        </td>
                         <td>
                             <a asp-controller="GiaLePhi" asp-action="Show" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Xem Chi tiết"
-                               target="_blank">
+                                   target="_blank">
                                 <i class="icon-lg la la-eye text-success"></i>
                             </a>
                             <button type="button" onclick="GetFile('@item.Mahs')" class="btn btn-sm btn-clean btn-icon" title="Giấy tờ kèm theo">
@@ -156,41 +159,10 @@
                                     </button>
                                 }
                             }
-
-                            <div class="dropdown dropdown-inline">
-                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" aria-expanded="false" title="Truyền lên CSDLGQG">
-                                    <i class="icon-lg la la-cog "></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" style="">
-                                    <ul class="nav nav-hoverable flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">
-                                                <i class="nav-icon la la-forward"></i>
-                                                <span class="nav-text">Thiết lập thông điệp</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">
-                                                <i class="nav-icon la la-forward"></i>
-                                                <span class="nav-text">Cấu hình công khai dữ liệu </span>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">
-                                                <i class="nav-icon la la-forward"></i>
-                                                <span class="nav-text">Xem trước thông điệp</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">
-                                                <i class="nav-icon la la-forward"></i>
-                                                <span class="nav-text">Truyền dữ liệu</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                            @{
+                                ViewData["maHoSoTruyen"] = item.Mahs;
+                            }
+                            @await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_button.cshtml", ViewData["maHoSoTruyen"])
                         </td>
                     </tr>
                 }
@@ -201,3 +173,4 @@
 @await Html.PartialAsync("~/Views/Admin/Manages/DinhGia/GiaLePhi/HoanThanh/ModalTongHop.cshtml")
 @await Html.PartialAsync("~/Views/Admin/Manages/DinhGia/GiaLePhi/HoanThanh/Modal.cshtml")
 @await Html.PartialAsync("~/Views/Admin/Manages/DinhGia/GiaLePhi/ThongTinGiayTo/Show.cshtml")
+@await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_modal.cshtml")

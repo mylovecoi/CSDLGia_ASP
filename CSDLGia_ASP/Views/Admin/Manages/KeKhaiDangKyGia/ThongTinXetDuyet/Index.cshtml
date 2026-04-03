@@ -56,7 +56,7 @@
                     Quản lý hồ sơ @ViewData["HoSo"] xét duyệt
                 </span>
             </h3>
-        </div>     
+        </div>
     </div>
     <hr />
     <div class="card-body">
@@ -113,13 +113,14 @@
                     <th width="10%">Thời điểm</th>
                     <th width="10%">Đơn vị tiếp nhận hồ sơ</th>
                     <th width="20%">Trạng thái</th>
+                    <th>Trạng thái CSDL<br /> Giá Quốc Gia</th>
                     <th width="15%">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 @if (Model != null)
                 {
-                    @foreach (var item in Model.OrderByDescending(t=>t.NgayChuyen))
+                    @foreach (var item in Model.OrderByDescending(t => t.NgayChuyen))
                     {
                         <tr>
                             <td style="text-align:center">@(record_id++)</td>
@@ -163,13 +164,15 @@
                                     }
                                 </span>
                             </td>
+                            <td style="text-align: center">
+                            </td>
                             <td>
                                 <a asp-controller="KeKhaiDangKyGia" asp-action="Show" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Xem chi tiết"
-                                   target="_blank">
+                                       target="_blank">
                                     <i class="icon-lg la la-eye text-success"></i>
                                 </a>
                                 <button type="button" onclick="GetFile('@item.Mahs')" class="btn btn-sm btn-clean btn-icon" title="Giấy tờ kèm theo">
-                                        <i class="icon-lg la la-file-alt text-dark"></i>
+                                    <i class="icon-lg la la-file-alt text-dark"></i>
                                 </button>
                                 @if (item.TrangThai == "CD")
                                 {
@@ -211,33 +214,14 @@
                                         </button>
                                     }
                                 }
-                                <a asp-controller="TrangThaiHoSo" target="_blank" asp-action="Index" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Trạng Thái Hồ Sơ"
-                                   target="_blank">
+                                <a asp-controller="TrangThaiHoSo" target="_blank" asp-action="Index" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Trạng Thái Hồ Sơ">
                                     <i class="icon-lg la la-redo-alt text-danger"></i>
 
                                 </a>
-                                <!-- Chưa có chức năng phân quyền để truyền dữ liệu lên csdl quốc gia -->
-                                <div class="dropdown dropdown-inline">
-                                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
-                                        <span class="svg-icon svg-icon-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24"></rect>
-                                                    <path d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z" fill="#000000"></path>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                        <ul class="navi flex-column navi-hover py-2">                                            
-                                            <li class="navi-item">
-                                                <a type="button" data-target="#TruyenHoSo_Modal" data-toggle="modal" onclick="setTruyenDuLieu('@item.Mahs')" class="navi-link border-0 btn-clean" title="Thêm mới">
-                                                    <i class="la la-file-text-o"></i>Truyền dữ liệu
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                @{
+                                    ViewData["maHoSoTruyen"] = item.Mahs;
+                                }
+                                @await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_button.cshtml", ViewData["maHoSoTruyen"])
                             </td>
                         </tr>
                     }
@@ -246,7 +230,6 @@
         </table>
     </div>
 </div>
-
-
 @await Html.PartialAsync("~/Views/Admin/Manages/KeKhaiDangKyGia/ThongTinXetDuyet/Modal.cshtml")
 @await Html.PartialAsync("~/Views/Admin/Manages/KeKhaiDangKyGia/ThongTinGiayTo/Show.cshtml")
+@await Html.PartialAsync("~/Views/Admin/_DungChung/KetNoiAPI/Index_modal.cshtml")
