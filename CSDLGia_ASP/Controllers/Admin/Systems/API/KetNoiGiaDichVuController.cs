@@ -163,8 +163,6 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems.API
             return View("Views/Admin/Systems/KetNoiGiaDichVu/Index_HoSo.cshtml", hoSoKeKhai);
         }
 
-
-
         [Route("KetNoiGiaDichVu/LayDanhSachHoSoDVLT")]
         [HttpPost]
         public async Task<IActionResult> LayDanhSachHoSoDVLT(VMAPIHoSoKeKhaiDVLT vMAPIHoSoKeKhaiDVLT)
@@ -274,90 +272,142 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems.API
             return RedirectToAction("DanhSachHoSoKeKhaiDVLT", "KetNoiGiaDichVu");
         }
 
+        //[Route("KetNoiGiaDichVu/Show")]
+        //[HttpGet]
+        //public IActionResult Show(string mahs)
+        //{
+        //    if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
+        //    {
+        //        if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kknygia.kkgdvlt.giakk", "Index") ||
+        //            Helpers.GetSsAdmin(HttpContext.Session, "Level") == "DN")
+        //        {
+        //            var model = _db.HoSoKeKhaiGia.FirstOrDefault(t => t.mahs == mahs);
+        //            var hoso_kk = new VMHoSoKeKhaiGia
+        //            {
+                       
+        //                mahs = model.mahs,
+        //                masothue = model.masothue,
+        //                macskd = model.macskd,
+        //                socv = model.socv,
+        //                ngaynhap = model.ngaynhap,
+        //                ngayhieuluc = model.ngayhieuluc,
+        //                ttnguoinop = model.ttnguoinop,
+        //                //Dtll = model.Dtll,
+        //                sohsnhan = model.sohsnhan,
+        //                ngaychuyen = model.ngaychuyen,
+        //                ngaynhan = model.ngaynhan,
+        //                //Ptnguyennhan = model.Ptnguyennhan,
+        //                //Chinhsachkm = model.Chinhsachkm,
+        //            };
+
+        //            var modeldn = _db.DoanhNghiepDVLT.FirstOrDefault(t => t.masothue == model.masothue);
+        //            if (modeldn != null)
+        //            {
+        //                hoso_kk.tendn = modeldn.tendn;
+        //                hoso_kk.Diadanh = modeldn.diadanh;
+        //                hoso_kk.Diachi = modeldn.diachidn;
+        //            }
+
+        //            var modelcskd = _db.CoSoKinhDoanhDVLT.FirstOrDefault(t => t.macskd == model.macskd);
+        //            if (modelcskd != null)
+        //            {
+        //                hoso_kk.tencskd = modelcskd.tencskd;
+        //                //hoso_kk.Diachikd = modelcskd.Diachikd;
+        //                hoso_kk.loaihang = modelcskd.loaihang;
+        //            }
+
+        //            //var modeldv = _db.DsDonVi.FirstOrDefault(t => t.MaDv == model.Macqcq);
+        //            //if (modeldv != null)
+        //            //{
+        //            //    hoso_kk.Tendvhienthi = modeldv.TenDvHienThi;
+        //            //    hoso_kk.Chucvuky = modeldv.ChucVuKy;
+        //            //    hoso_kk.Nguoiky = modeldv.NguoiKy;
+        //            //}
+
+        //            var modelct = _db.HoSoKeKhaiGia_ChiTiet.Where(t => t.mahs == model.mahs);
+        //            if (modelct.Any())
+        //            {
+        //                hoso_kk.ds_cths = modelct.Select(item => new VMHoSoKeKhaiGia_ChiTiet
+        //                {
+        //                    mahs = item.mahs,
+        //                    mucgialk = item.mucgialk,
+        //                    mucgiakk = item.mucgiakk,
+        //                    loaip = item.loaip,
+        //                    maloaip = item.maloaip,
+        //                    qccl = item.qccl,
+        //                    sohieu = item.sohieu,
+        //                    ghichu = item.ghichu,
+        //                    tendoituong = item.tendoituong,
+        //                }).ToList();
+        //            }
+
+        //            ViewData["Title"] = "Kê khai giá dịch vụ lưu trú";
+                  
+        //            return View("Views/Admin/Systems/KetNoiGiaDichVu/Show.cshtml", hoso_kk);
+
+        //        }
+        //        else
+        //        {
+        //            ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
+        //            return View("Views/Admin/Error/Page.cshtml");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return View("Views/Admin/Error/SessionOut.cshtml");
+        //    }
+        //}
+
         [Route("KetNoiGiaDichVu/Show")]
         [HttpGet]
-        public IActionResult Show(string mahs)
+        public IActionResult Show(string Mahs)
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
+            var model = GetThongTinKk(Mahs);
+
+            ViewData["Title"] = "Kê khai giá dịch vụ lưu trú";
+            return View("~/Views/Admin/Systems/KetNoiGiaDichVu/Show.cshtml", model);
+        }
+
+        private VMHoSoKeKhaiGia GetThongTinKk(string Mahs)
+        {
+            var model = _db.HoSoKeKhaiGia.FirstOrDefault(t => t.mahs == Mahs);
+            var hoso_kk = new VMHoSoKeKhaiGia
             {
-                if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.kknygia.kkgdvlt.giakk", "Index") ||
-                    Helpers.GetSsAdmin(HttpContext.Session, "Level") == "DN")
-                {
-                    var model = _db.HoSoKeKhaiGia.FirstOrDefault(t => t.mahs == mahs);
-                    var hoso_kk = new VMHoSoKeKhaiGia
-                    {
-                       
-                        mahs = model.mahs,
-                        masothue = model.masothue,
-                        macskd = model.macskd,
-                        socv = model.socv,
-                        ngaynhap = model.ngaynhap,
-                        ngayhieuluc = model.ngayhieuluc,
-                        ttnguoinop = model.ttnguoinop,
-                        //Dtll = model.Dtll,
-                        sohsnhan = model.sohsnhan,
-                        ngaychuyen = model.ngaychuyen,
-                        ngaynhan = model.ngaynhan,
-                        //Ptnguyennhan = model.Ptnguyennhan,
-                        //Chinhsachkm = model.Chinhsachkm,
-                    };
+                mahs = model.mahs,
+                socv = model.socv,
+                ngaynhap = model.ngaynhap,
+                ngayhieuluc = model.ngayhieuluc,
+                ttnguoinop = model.ttnguoinop,
+                sohsnhan = model.sohsnhan,
+                ngaychuyen = model.ngaychuyen,
+                ngaynhan = model.ngaynhan,
+            };
+            var cskd = _db.CoSoKinhDoanhDVLT.FirstOrDefault(t => t.macskd == model.macskd)?.masothue ?? "";
+            var doanhnghiep = _db.DoanhNghiepDVLT.FirstOrDefault(t => t.masothue == cskd)?.masothue ?? "";
+            hoso_kk = GetThongTinDn(hoso_kk, doanhnghiep);
+            hoso_kk = GetThongTinCt(hoso_kk, model.mahs);
 
-                    var modeldn = _db.DoanhNghiepDVLT.FirstOrDefault(t => t.masothue == model.masothue);
-                    if (modeldn != null)
-                    {
-                        hoso_kk.tendn = modeldn.tendn;
-                        hoso_kk.Diadanh = modeldn.diadanh;
-                        hoso_kk.Diachi = modeldn.diachidn;
-                    }
+            return hoso_kk;
+        }
 
-                    var modelcskd = _db.CoSoKinhDoanhDVLT.FirstOrDefault(t => t.macskd == model.macskd);
-                    if (modelcskd != null)
-                    {
-                        hoso_kk.tencskd = modelcskd.tencskd;
-                        //hoso_kk.Diachikd = modelcskd.Diachikd;
-                        hoso_kk.loaihang = modelcskd.loaihang;
-                    }
-
-                    //var modeldv = _db.DsDonVi.FirstOrDefault(t => t.MaDv == model.Macqcq);
-                    //if (modeldv != null)
-                    //{
-                    //    hoso_kk.Tendvhienthi = modeldv.TenDvHienThi;
-                    //    hoso_kk.Chucvuky = modeldv.ChucVuKy;
-                    //    hoso_kk.Nguoiky = modeldv.NguoiKy;
-                    //}
-
-                    var modelct = _db.HoSoKeKhaiGia_ChiTiet.Where(t => t.mahs == model.mahs);
-                    if (modelct.Any())
-                    {
-                        hoso_kk.ds_cths = modelct.Select(item => new VMHoSoKeKhaiGia_ChiTiet
-                        {
-                            mahs = item.mahs,
-                            mucgialk = item.mucgialk,
-                            mucgiakk = item.mucgiakk,
-                            loaip = item.loaip,
-                            maloaip = item.maloaip,
-                            qccl = item.qccl,
-                            sohieu = item.sohieu,
-                            ghichu = item.ghichu,
-                            tendoituong = item.tendoituong,
-                        }).ToList();
-                    }
-
-                    ViewData["Title"] = "Kê khai giá dịch vụ lưu trú";
-                  
-                    return View("Views/Admin/Systems/KetNoiGiaDichVu/Show.cshtml", hoso_kk);
-
-                }
-                else
-                {
-                    ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
-                    return View("Views/Admin/Error/Page.cshtml");
-                }
-            }
-            else
+        private VMHoSoKeKhaiGia GetThongTinDn(VMHoSoKeKhaiGia hoso, string masothue)
+        {
+            var modeldn = _db.DoanhNghiepDVLT.FirstOrDefault(t => t.masothue == masothue);
+            if (modeldn != null)
             {
-                return View("Views/Admin/Error/SessionOut.cshtml");
+                hoso.tendn = modeldn.tendn;
             }
+            return hoso;
+        }
+
+        private VMHoSoKeKhaiGia GetThongTinCt(VMHoSoKeKhaiGia hoso, string Mahs)
+        {
+            var modelct = _db.HoSoKeKhaiGia_ChiTiet.Where(t => t.mahs == Mahs);
+            if (modelct != null)
+            {
+                hoso.HoSoKeKhaiGia_ChiTiet = modelct.ToList();
+            }
+            return hoso;
         }
     }
 }
