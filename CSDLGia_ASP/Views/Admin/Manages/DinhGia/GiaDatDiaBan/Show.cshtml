@@ -4,9 +4,6 @@
     var DsDiaBanXa = (IEnumerable<DsDiaBan>)ViewData["DsDiaBanXa"];
     var dsloaidat = (IEnumerable<DmLoaiDat>)ViewData["Dsloaidat"];
     var dsdonvi = (IEnumerable<DsDonVi>)ViewData["DsDonVi"];
-
-
-
 }
 <br />
 <br />
@@ -15,7 +12,7 @@
 <p style="text-align: center; font-weight: bold; font-size: 30px;">THÔNG TIN HỒ SƠ</p>
 <p style="text-align: left; font-size: 16px;">Số quyết định:@Model.Soqd</p>
 <p style="text-align: left; font-size: 16px;">
-    Địa bàn:@ViewData["TenDiaBan"]
+    Địa bàn: @ViewData["TenDiaBan"]
 </p>
 <p style="text-align: left; font-size: 16px;">Thời điểm:@Helpers.ConvertDateToStr(Model.Thoidiem)</p>
 
@@ -54,11 +51,14 @@
                 {
                     <tr>
                         <td style="text-align:center">@item.HienThi</td>
-                        <td style="text-align:left">@item.Loaidat</td>
+                        <td style="text-align:left">
+                            @if (!string.IsNullOrEmpty(item.Maloaidat))
+                            @(dsloaidat.FirstOrDefault(x => x.Maloaidat == item.Maloaidat)?.Loaidat ?? "")
+                        </td>
                         <td style="text-align:left">@item.Mota</td>
                         <td style="text-align:center">@item.Diemdau</td>
                         <td style="text-align:center">@item.Diemcuoi</td>
-                                    <td style="text-align:center">@item.Loaiduong</td>
+                        <td style="text-align:center">@item.Loaiduong</td>
                         <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt1)</td>
                         <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt2)</td>
                         <td style="text-align:right">@Helpers.ConvertDbToStr(item.Giavt3)</td>

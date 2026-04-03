@@ -100,18 +100,14 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaDatDiaBan
                                 Diemdau = worksheet.Cells[row, 3].Value != null ? worksheet.Cells[row, 3].Value.ToString().Trim() : "",
                                 Diemcuoi = worksheet.Cells[row, 4].Value != null ? worksheet.Cells[row, 4].Value.ToString().Trim() : "",
                                 Loaiduong = worksheet.Cells[row, 5].Value != null ? worksheet.Cells[row, 5].Value.ToString().Trim() : "",
-                                //Hesok = worksheet.Cells[row, 6].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 6].Value.ToString().Trim()) : 0,
-                                //Hesok = Helpers.ConvertStrToDb(worksheet.Cells[row, 6].Value != null ?
-                                //                    worksheet.Cells[row, 6].Value.ToString().Trim() : ""),
-
                                 Giavt1 = worksheet.Cells[row, 6].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 6].Value.ToString().Trim()) : 0,
                                 Giavt2 = worksheet.Cells[row, 7].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 7].Value.ToString().Trim()) : 0,
                                 Giavt3 = worksheet.Cells[row, 8].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 8].Value.ToString().Trim()) : 0,
                                 Giavt4 = worksheet.Cells[row, 9].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 9].Value.ToString().Trim()) : 0,
                                 Giavt5 = worksheet.Cells[row, 10].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 10].Value.ToString().Trim()) : 0,
-                                Maloaidat = worksheet.Cells[row, 14].Value != null ? worksheet.Cells[row, 14].Value.ToString().Trim() : "",
                                 Giavt6 = worksheet.Cells[row, 11].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 11].Value.ToString().Trim()) : 0,
                                 Giavt7 = worksheet.Cells[row, 12].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 12].Value.ToString().Trim()) : 0,
+                                Maloaidat = worksheet.Cells[row, 14].Value != null ? worksheet.Cells[row, 14].Value.ToString().Trim() : "",
                                 Giavtconlai = worksheet.Cells[row, 13].Value != null ? Helpers.ConvertStrToDb(worksheet.Cells[row, 13].Value.ToString().Trim()) : 0,
                                 Trangthai = "XD",
                                 MaDv = request.Madv

@@ -345,33 +345,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaDatDiaBan
                 if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.giadat.giadatdb.thongtin", "Index"))
                 {
                     var model = _db.GiaDatDiaBan.FirstOrDefault(t => t.Mahs == Mahs);
-                    var model_ct = (from dat in _db.GiaDatDiaBanCt.Where(t => t.Mahs == Mahs)
-                                    join dm in _db.DmLoaiDat on dat.Maloaidat equals dm.Maloaidat
-                                    join diaban in _db.DsDiaBan on dat.Madiaban equals diaban.MaDiaBan
-                                    select new CSDLGia_ASP.Models.Manages.DinhGia.GiaDatDiaBanCt
-                                    {
-                                        Id = dat.Id,
-                                        HienThi = dat.HienThi,
-                                        Maloaidat = dat.Maloaidat,
-                                        Mota = dat.Mota,
-                                        Diemdau = dat.Diemdau,
-                                        Diemcuoi = dat.Diemcuoi,
-                                        Loaiduong = dat.Loaiduong,
-                                        Hesok = dat.Hesok,
-                                        Giavt1 = dat.Giavt1,
-                                        Giavt2 = dat.Giavt2,
-                                        Giavt3 = dat.Giavt3,
-                                        Giavt4 = dat.Giavt4,
-                                        Giavt5 = dat.Giavt5,
-                                        Giavt6 = dat.Giavt6,
-                                        Giavt7 = dat.Giavt7,
-                                        Giavtconlai = dat.Giavtconlai,
-                                        Loaidat = dm.Loaidat,
-                                        Sapxep = dat.Sapxep,
-                                        Madiaban = dat.Madiaban,
-                                        TenDiaBan=diaban.TenDiaBan,                                        
-                                    });
-                    model.GiaDatDiaBanCt = model_ct.ToList();
+                    model.GiaDatDiaBanCt = _db.GiaDatDiaBanCt.Where(t => t.Mahs == model.Mahs).ToList();
 
                     ViewData["TenDiaBan"] = _db.DsDiaBan.FirstOrDefault(x => x.MaDiaBan == model.Madiaban).TenDiaBan;
                     ViewData["TenTinh"] = _db.DsDiaBan.FirstOrDefault(x => string.IsNullOrEmpty(x.MaDiaBanCq)).TenDiaBan;
