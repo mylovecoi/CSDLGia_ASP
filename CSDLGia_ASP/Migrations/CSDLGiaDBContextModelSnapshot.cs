@@ -16868,6 +16868,57 @@ namespace CSDLGia_ASP.Migrations
                     b.ToTable("HoSoKeKhaiGia_ChiTiet");
                 });
 
+            modelBuilder.Entity("CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu.VMHoSoKeKhaiGia_ChiTiet", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int?>("HoSoKeKhaiGiaid")
+                        .HasColumnType("int");
+
+                    b.Property<string>("apdungpublic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ghichu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("loaip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("macskd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("mahs")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("maloaip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("mucgiakk")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("mucgialk")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("qccl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("sohieu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("tendoituong")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("HoSoKeKhaiGiaid");
+
+                    b.ToTable("VMHoSoKeKhaiGia_ChiTiet");
+                });
+
             modelBuilder.Entity("CSDLGia_ASP.Models.Systems.NhatKySuDung", b =>
                 {
                     b.Property<int>("Id")
@@ -17693,6 +17744,18 @@ namespace CSDLGia_ASP.Migrations
                     b.HasKey("MaChucNang", "TenDangNhap");
 
                     b.ToTable("tblPhanQuyen");
+                });
+
+            modelBuilder.Entity("CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu.VMHoSoKeKhaiGia_ChiTiet", b =>
+                {
+                    b.HasOne("CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu.HoSoKeKhaiGia", null)
+                        .WithMany("ds_cths")
+                        .HasForeignKey("HoSoKeKhaiGiaid");
+                });
+
+            modelBuilder.Entity("CSDLGia_ASP.Models.Systems.KetNoiGiaDichVu.HoSoKeKhaiGia", b =>
+                {
+                    b.Navigation("ds_cths");
                 });
 #pragma warning restore 612, 618
         }

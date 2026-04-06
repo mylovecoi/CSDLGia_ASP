@@ -1,10 +1,14 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace CSDLGia_ASP.Migrations
 {
-    public partial class first_migration : Migration
+    /// <inheritdoc />
+    public partial class First_Commit : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -245,6 +249,7 @@ namespace CSDLGia_ASP.Migrations
                     Tel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fax = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Diadanh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Chucdanh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Nguoiky = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -298,7 +303,8 @@ namespace CSDLGia_ASP.Migrations
                     BOG = table.Column<double>(type: "float", nullable: false),
                     KKNYGIA = table.Column<double>(type: "float", nullable: false),
                     DvThuongMai = table.Column<double>(type: "float", nullable: false),
-                    KhamChuaBenh = table.Column<double>(type: "float", nullable: false)
+                    KhamChuaBenh = table.Column<double>(type: "float", nullable: false),
+                    LuHanh = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -435,6 +441,25 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DmGiaTriTaiSan",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaGiaTriTaiSan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenGiaTriTaiSan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmGiaTriTaiSan", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DmHinhThucThanhToan",
                 columns: table => new
                 {
@@ -449,6 +474,25 @@ namespace CSDLGia_ASP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DmHinhThucThanhToan", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmLinhVuc",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaLinhVuc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenLinhVuc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmLinhVuc", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -485,6 +529,25 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DmLoaiHinhDoanhNghiep",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaLoaiHinhDoanhNghiep = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenLoaiHinhDoanhNghiep = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmLoaiHinhDoanhNghiep", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DmNganhKd",
                 columns: table => new
                 {
@@ -513,6 +576,7 @@ namespace CSDLGia_ASP.Migrations
                     Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Theodoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phanloai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Report = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -537,6 +601,139 @@ namespace CSDLGia_ASP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DmNhomHh", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmPhanLoaiGia",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaPhanLoaiGia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenPhanLoaiGia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmPhanLoaiGia", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmPhanLoaiGiaDat",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaPhanLoaiGiaDat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenPhanLoaiGiaDat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmPhanLoaiGiaDat", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmPhanLoaiHangHoaDichVu",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaHangHoaDichVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenHangHoaDichVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmPhanLoaiHangHoaDichVu", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmPhanLoaiKhuVuc",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaKhuVuc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenKhuVuc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmPhanLoaiKhuVuc", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmPhanLoaiNhomHangHoaDichVu",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaNhomHangHoaDichVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenNhomHangHoaDichVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmPhanLoaiNhomHangHoaDichVu", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmPhanLoaiTaiSan",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaTaiSan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenTaiSan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmPhanLoaiTaiSan", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DmPhuongPhapThamDinh",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaPhuongPhapThamDinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenPhuongPhapThamDinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmPhuongPhapThamDinh", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -572,6 +769,25 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DmThuocTinh",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaThuocTinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenThuocTinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DmThuocTinh", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DoanhNghiepDVLT",
                 columns: table => new
                 {
@@ -604,6 +820,7 @@ namespace CSDLGia_ASP.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MaDiaBan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaDiaBanCq = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TenDiaBan = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -623,6 +840,7 @@ namespace CSDLGia_ASP.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MaDiaBan = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MaQhNs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaCqcq = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MaDv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TenDv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DiaChi = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -742,6 +960,25 @@ namespace CSDLGia_ASP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DsXaPhuong", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DuLieuTapHuan",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenChucNang = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileGoc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileMau = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    Created_At = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_At = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DuLieuTapHuan", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1034,6 +1271,134 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GiaDatCuTheVl",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mahs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Madiaban = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Maxp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Vitri = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Maloaidat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Soqd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Dvt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Dientich = table.Column<double>(type: "float", nullable: false),
+                    Giatri = table.Column<double>(type: "float", nullable: false),
+                    Congbo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thaotac = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ghichu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lichsu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tinhtrang = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thoidiem = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Macqcq = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lydo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thongtin = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Trangthai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thoidiem_h = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Macqcq_h = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Madv_h = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lydo_h = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thongtin_h = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Trangthai_h = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thoidiem_t = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Macqcq_t = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Madv_t = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lydo_t = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thongtin_t = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Trangthai_t = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thoidiem_ad = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Macqcq_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Madv_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lydo_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thongtin_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Trangthai_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Phanloai = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GiaDatCuTheVl", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GiaDatCuTheVlCt",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mahs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mapp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Noidungcv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NhapGia = table.Column<bool>(type: "bit", nullable: false),
+                    ChiPhiNhanCong = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiDungCu = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiNangLuong = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiKhauHao = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiVatLieu = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiTrucTiepKkh = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiTrucTiepCkh = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiQlChungKkh = table.Column<double>(type: "float", nullable: false),
+                    ChiPhiQlChungCkh = table.Column<double>(type: "float", nullable: false),
+                    DonGiaKkh = table.Column<double>(type: "float", nullable: false),
+                    DonGiaCkh = table.Column<double>(type: "float", nullable: false),
+                    Trangthai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaDiaBan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaXaPhuong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    STTSapXep = table.Column<double>(type: "float", nullable: false),
+                    STTHienThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GiaDatCuTheVlCt", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GiaDatCuTheVlDmPPDGDat",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mapp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tenpp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mota = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Theodoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GiaDatCuTheVlDmPPDGDat", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GiaDatCuTheVlDmPPDGDatCt",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mapp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SapXep = table.Column<double>(type: "float", nullable: false),
+                    HienThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Noidungcv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NhapGia = table.Column<bool>(type: "bit", nullable: false),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GiaDatCuTheVlDmPPDGDatCt", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GiaDatDiaBan",
                 columns: table => new
                 {
@@ -1107,6 +1472,9 @@ namespace CSDLGia_ASP.Migrations
                     Giavt3 = table.Column<double>(type: "float", nullable: false),
                     Giavt4 = table.Column<double>(type: "float", nullable: false),
                     Giavt5 = table.Column<double>(type: "float", nullable: false),
+                    Giavt6 = table.Column<double>(type: "float", nullable: false),
+                    Giavt7 = table.Column<double>(type: "float", nullable: false),
+                    Giavtconlai = table.Column<double>(type: "float", nullable: false),
                     Hesok = table.Column<double>(type: "float", nullable: false),
                     Sapxep = table.Column<double>(type: "float", nullable: false),
                     Trangthai = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1519,7 +1887,9 @@ namespace CSDLGia_ASP.Migrations
                     Dvt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Sotobanbo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TrangThai = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MaDv = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    MaDv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaDiaBan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Maxp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1834,6 +2204,7 @@ namespace CSDLGia_ASP.Migrations
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Manhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tennhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Madichvu = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -2562,6 +2933,8 @@ namespace CSDLGia_ASP.Migrations
                     Matt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Tentt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Theodoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThaiCSDLQG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayKetNoi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -2597,7 +2970,9 @@ namespace CSDLGia_ASP.Migrations
                     ipf_pdf = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ipf_pdf_base64 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ipf_excel = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ipf_excel_base64 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ipf_excel_base64 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThaiCSDLQG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayKetNoi = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2954,7 +3329,8 @@ namespace CSDLGia_ASP.Migrations
                     HienThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Style = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TrangThai = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -2967,11 +3343,12 @@ namespace CSDLGia_ASP.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Phanloai = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Manhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Tennhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mota = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dvt = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Stt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KhoiLuong = table.Column<double>(type: "float", nullable: false),
+                    SapXep = table.Column<double>(type: "float", nullable: false),
+                    HienThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -3078,28 +3455,6 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GiaNuocShCtDf",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Doituong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Giachuathue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Thuevat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Giacothue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phibvmttyle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phibvmt = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Thanhtien = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Mahuyen = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GiaNuocShCtDf", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GiaNuocShDmKhung",
                 columns: table => new
                 {
@@ -3116,29 +3471,6 @@ namespace CSDLGia_ASP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GiaNuocShDmKhung", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GiaNuocShDmVung",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Madoituong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Doituongsd = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MaSo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MaSoGoc = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HienThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    STT = table.Column<int>(type: "int", nullable: false),
-                    CapDo = table.Column<int>(type: "int", nullable: false),
-                    SttHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GiaNuocShDmVung", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -3326,7 +3658,14 @@ namespace CSDLGia_ASP.Migrations
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     STTSapxep = table.Column<int>(type: "int", nullable: false),
                     STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NhanHieu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NuocSxLr = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TheTich = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoNguoiTaiTrong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonGia = table.Column<double>(type: "float", nullable: false),
+                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TiLe = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -3351,7 +3690,11 @@ namespace CSDLGia_ASP.Migrations
                     Stt = table.Column<int>(type: "int", nullable: false),
                     CapDo = table.Column<int>(type: "int", nullable: false),
                     SttHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NhanHieu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NuocSxLr = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TheTich = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoNguoiTaiTrong = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -3653,6 +3996,7 @@ namespace CSDLGia_ASP.Migrations
                     Thoidiem = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Macqcq = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MadvXuly = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Lydo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Thongtin = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Trangthai = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -3696,6 +4040,8 @@ namespace CSDLGia_ASP.Migrations
                     Maspdv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Manhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ten = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoaiDoThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoaiDoThi2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dvt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Mucgiatu = table.Column<double>(type: "float", nullable: false),
                     Mucgiaden = table.Column<double>(type: "float", nullable: false),
@@ -3719,9 +4065,12 @@ namespace CSDLGia_ASP.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Manhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Maspdv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Tenspdv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoaiDoThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoaiDoThi2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HienThi = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dvt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Sapxep = table.Column<int>(type: "int", nullable: false),
@@ -3740,6 +4089,7 @@ namespace CSDLGia_ASP.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Manhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Tennhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Mota = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -4055,7 +4405,9 @@ namespace CSDLGia_ASP.Migrations
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PhanLoaiHoSo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CodeExcel = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CodeExcel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThaiCSDLQG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayKetNoi = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -4072,6 +4424,10 @@ namespace CSDLGia_ASP.Migrations
                     Maspdv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Trangthai = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dongia = table.Column<double>(type: "float", nullable: false),
+                    GiaToiDaTheoCuLy1 = table.Column<double>(type: "float", nullable: false),
+                    GiaToiDaTheoCuLy2 = table.Column<double>(type: "float", nullable: false),
+                    GiaToiDaTheoCuLy3 = table.Column<double>(type: "float", nullable: false),
+                    GiaToiDaTheoCuLy4 = table.Column<double>(type: "float", nullable: false),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Phanloaidv = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -4118,6 +4474,8 @@ namespace CSDLGia_ASP.Migrations
                     Tennhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Mota = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Theodoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThaiCSDLQG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayKetNoi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -4854,7 +5212,9 @@ namespace CSDLGia_ASP.Migrations
                     Ipf4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ipf5 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhanLoaiHoSo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CodeExcel = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CodeExcel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThaiCSDLQG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayKetNoi = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -4927,6 +5287,8 @@ namespace CSDLGia_ASP.Migrations
                     Tennhom = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Sapxep = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Theodoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThaiCSDLQG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayKetNoi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -5458,7 +5820,7 @@ namespace CSDLGia_ASP.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     KeyLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TenNhomQ = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenNhomQ = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ChucNang = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created_At = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_At = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -5534,6 +5896,81 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KeKhaiDangKyGia",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaCsKd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mahs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhanLoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reports = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaNghe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaCqCq = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoQD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayQD = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SoQdLk = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayQdLk = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NgayThucHien = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DonViTinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThongTinNguoiChuyen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoDtNguoiChuyen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayChuyen = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TrangThai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LyDo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoHsDuyet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayDuyet = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Ytcauthanhgia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thydggadgia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thoidiem = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KeKhaiDangKyGia", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KeKhaiDangKyGiaCSKD",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaDv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaNghe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaCqCq = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaCsKd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenCsKd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DiaChi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoDt = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KeKhaiDangKyGiaCSKD", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KeKhaiDangKyGiaCt",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaCsKd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mahs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenDvCungUng = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    QuyCachChatLuong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThoiGianThucHien = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MucGiaKeKhaiLk = table.Column<double>(type: "float", nullable: false),
+                    MucGiaKeKhai = table.Column<double>(type: "float", nullable: false),
+                    HinhThucKinhDoanh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThai = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KeKhaiDangKyGiaCt", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KetNoiAPI",
                 columns: table => new
                 {
@@ -5555,6 +5992,33 @@ namespace CSDLGia_ASP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KetNoiAPI", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KetNoiAPI_DanhSach",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Maso = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkTruyenGet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkTruyenPost = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkTruyenPut = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkNhanGet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkNhanPost = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkNhanPut = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ghichu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaBM = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaDiaBan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaDonVi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NguoiTao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NguoiDuyet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KetNoiAPI_DanhSach", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -6225,6 +6689,35 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KkGiaLuHanhCt",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mahs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tendvcu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Qccl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thoigian = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Dodaitgian = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gialk = table.Column<double>(type: "float", nullable: false),
+                    Giakk = table.Column<double>(type: "float", nullable: false),
+                    Dvt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ghichu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Thuevat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Trangthai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    STTSapxep = table.Column<int>(type: "int", nullable: false),
+                    STTHienthi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Style = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KkGiaLuHanhCt", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KkGiaOtoNkSxCt",
                 columns: table => new
                 {
@@ -6671,7 +7164,12 @@ namespace CSDLGia_ASP.Migrations
                     Edit = table.Column<bool>(type: "bit", nullable: false),
                     Delete = table.Column<bool>(type: "bit", nullable: false),
                     Approve = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Public = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Magoc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phanloai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    Sttsx = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -6748,6 +7246,7 @@ namespace CSDLGia_ASP.Migrations
                     ChiTieu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dvt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dongia = table.Column<double>(type: "float", nullable: false),
+                    Dongia2 = table.Column<double>(type: "float", nullable: false),
                     Madv = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TrangThai = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SapXep = table.Column<double>(type: "float", nullable: false),
@@ -6859,6 +7358,25 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoleList",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaGoc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhanLoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    STTSapXep = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleList", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Supports",
                 columns: table => new
                 {
@@ -6923,7 +7441,11 @@ namespace CSDLGia_ASP.Migrations
                     FileQuyChe = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FileQuyCheBase64 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FileDangKy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FileDangKyBase64 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FileDangKyBase64 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimeOut = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SSOCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SSOGetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SSOGetUserInfo = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -7003,6 +7525,8 @@ namespace CSDLGia_ASP.Migrations
                     Lydo_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Thongtin_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Trangthai_ad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThaiCSDLQG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayKetNoi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Ipf1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ipf2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ipf3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -7093,6 +7617,78 @@ namespace CSDLGia_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ThamDinhGiaDvLichSu",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdDV = table.Column<int>(type: "int", nullable: false),
+                    Maso = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoQD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayQD = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FileQD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Theodoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ThamDinhGiaDvLichSu", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ThamDinhGiaHD",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mahs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaHoiDong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ToTung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CanCuPhapLy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TheoDeNghi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CapHoiDong = table.Column<int>(type: "int", nullable: false),
+                    LoaiHoiDong = table.Column<int>(type: "int", nullable: false),
+                    SoQD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayQD = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CoQuanBanHanh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenHoiDong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChuTichHoiDong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChucVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NhiemVuHoiDong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NoiDungQD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaTinhApDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaHuyenApDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileQD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileQD_Base64 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ThamDinhGiaHD", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ThamDinhGiaHDCt",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaHoiDong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    STT = table.Column<int>(type: "int", nullable: false),
+                    HoTen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChucVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VaiTro = table.Column<int>(type: "int", nullable: false),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ThamDinhGiaHDCt", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ThongTinGiayTo",
                 columns: table => new
                 {
@@ -7163,6 +7759,7 @@ namespace CSDLGia_ASP.Migrations
                     Tel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fax = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Diadanh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Chucdanh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Nguoiky = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -7240,7 +7837,8 @@ namespace CSDLGia_ASP.Migrations
                     Group = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LinkAPI = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Manghanh = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Manghe = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Manghe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SSO = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -7277,8 +7875,66 @@ namespace CSDLGia_ASP.Migrations
                 {
                     table.PrimaryKey("PK_VbQlNn", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "YKienGopY",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaDv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TieuDe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ipf1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayGopY = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenDangNhap = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NoiDungPhanHoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonViPhanHoi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayPhanHoi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_YKienGopY", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VMHoSoKeKhaiGia_ChiTiet",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    macskd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    mahs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    maloaip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    loaip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    qccl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    sohieu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ghichu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    mucgialk = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    mucgiakk = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    tendoituong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    apdungpublic = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HoSoKeKhaiGiaid = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VMHoSoKeKhaiGia_ChiTiet", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_VMHoSoKeKhaiGia_ChiTiet_HoSoKeKhaiGia_HoSoKeKhaiGiaid",
+                        column: x => x.HoSoKeKhaiGiaid,
+                        principalTable: "HoSoKeKhaiGia",
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VMHoSoKeKhaiGia_ChiTiet_HoSoKeKhaiGiaid",
+                table: "VMHoSoKeKhaiGia_ChiTiet",
+                column: "HoSoKeKhaiGiaid");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -7327,13 +7983,22 @@ namespace CSDLGia_ASP.Migrations
                 name: "DmDvt");
 
             migrationBuilder.DropTable(
+                name: "DmGiaTriTaiSan");
+
+            migrationBuilder.DropTable(
                 name: "DmHinhThucThanhToan");
+
+            migrationBuilder.DropTable(
+                name: "DmLinhVuc");
 
             migrationBuilder.DropTable(
                 name: "DmLoaiDat");
 
             migrationBuilder.DropTable(
                 name: "DmLoaiGia");
+
+            migrationBuilder.DropTable(
+                name: "DmLoaiHinhDoanhNghiep");
 
             migrationBuilder.DropTable(
                 name: "DmNganhKd");
@@ -7345,10 +8010,34 @@ namespace CSDLGia_ASP.Migrations
                 name: "DmNhomHh");
 
             migrationBuilder.DropTable(
+                name: "DmPhanLoaiGia");
+
+            migrationBuilder.DropTable(
+                name: "DmPhanLoaiGiaDat");
+
+            migrationBuilder.DropTable(
+                name: "DmPhanLoaiHangHoaDichVu");
+
+            migrationBuilder.DropTable(
+                name: "DmPhanLoaiKhuVuc");
+
+            migrationBuilder.DropTable(
+                name: "DmPhanLoaiNhomHangHoaDichVu");
+
+            migrationBuilder.DropTable(
+                name: "DmPhanLoaiTaiSan");
+
+            migrationBuilder.DropTable(
+                name: "DmPhuongPhapThamDinh");
+
+            migrationBuilder.DropTable(
                 name: "DmSieuThi");
 
             migrationBuilder.DropTable(
                 name: "DmTaiLieuHuongDanSuDung");
+
+            migrationBuilder.DropTable(
+                name: "DmThuocTinh");
 
             migrationBuilder.DropTable(
                 name: "DoanhNghiepDVLT");
@@ -7370,6 +8059,9 @@ namespace CSDLGia_ASP.Migrations
 
             migrationBuilder.DropTable(
                 name: "DsXaPhuong");
+
+            migrationBuilder.DropTable(
+                name: "DuLieuTapHuan");
 
             migrationBuilder.DropTable(
                 name: "ExcellDanhMucLoaiDat");
@@ -7397,6 +8089,18 @@ namespace CSDLGia_ASP.Migrations
 
             migrationBuilder.DropTable(
                 name: "GiaCuocVanChuyenCt");
+
+            migrationBuilder.DropTable(
+                name: "GiaDatCuTheVl");
+
+            migrationBuilder.DropTable(
+                name: "GiaDatCuTheVlCt");
+
+            migrationBuilder.DropTable(
+                name: "GiaDatCuTheVlDmPPDGDat");
+
+            migrationBuilder.DropTable(
+                name: "GiaDatCuTheVlDmPPDGDatCt");
 
             migrationBuilder.DropTable(
                 name: "GiaDatDiaBan");
@@ -7585,13 +8289,7 @@ namespace CSDLGia_ASP.Migrations
                 name: "GiaNuocShCt");
 
             migrationBuilder.DropTable(
-                name: "GiaNuocShCtDf");
-
-            migrationBuilder.DropTable(
                 name: "GiaNuocShDmKhung");
-
-            migrationBuilder.DropTable(
-                name: "GiaNuocShDmVung");
 
             migrationBuilder.DropTable(
                 name: "GiaPhiChuyenGia");
@@ -7813,13 +8511,22 @@ namespace CSDLGia_ASP.Migrations
                 name: "GroupPermissions");
 
             migrationBuilder.DropTable(
-                name: "HoSoKeKhaiGia");
-
-            migrationBuilder.DropTable(
                 name: "HoSoKeKhaiGia_ChiTiet");
 
             migrationBuilder.DropTable(
+                name: "KeKhaiDangKyGia");
+
+            migrationBuilder.DropTable(
+                name: "KeKhaiDangKyGiaCSKD");
+
+            migrationBuilder.DropTable(
+                name: "KeKhaiDangKyGiaCt");
+
+            migrationBuilder.DropTable(
                 name: "KetNoiAPI");
+
+            migrationBuilder.DropTable(
+                name: "KetNoiAPI_DanhSach");
 
             migrationBuilder.DropTable(
                 name: "KetNoiAPI_HoSo");
@@ -7880,6 +8587,9 @@ namespace CSDLGia_ASP.Migrations
 
             migrationBuilder.DropTable(
                 name: "KkGiaKcbTnCt");
+
+            migrationBuilder.DropTable(
+                name: "KkGiaLuHanhCt");
 
             migrationBuilder.DropTable(
                 name: "KkGiaOtoNkSxCt");
@@ -7948,6 +8658,9 @@ namespace CSDLGia_ASP.Migrations
                 name: "Register");
 
             migrationBuilder.DropTable(
+                name: "RoleList");
+
+            migrationBuilder.DropTable(
                 name: "Supports");
 
             migrationBuilder.DropTable(
@@ -7972,6 +8685,15 @@ namespace CSDLGia_ASP.Migrations
                 name: "ThamDinhGiaDv");
 
             migrationBuilder.DropTable(
+                name: "ThamDinhGiaDvLichSu");
+
+            migrationBuilder.DropTable(
+                name: "ThamDinhGiaHD");
+
+            migrationBuilder.DropTable(
+                name: "ThamDinhGiaHDCt");
+
+            migrationBuilder.DropTable(
                 name: "ThongTinGiayTo");
 
             migrationBuilder.DropTable(
@@ -7991,6 +8713,15 @@ namespace CSDLGia_ASP.Migrations
 
             migrationBuilder.DropTable(
                 name: "VbQlNn");
+
+            migrationBuilder.DropTable(
+                name: "VMHoSoKeKhaiGia_ChiTiet");
+
+            migrationBuilder.DropTable(
+                name: "YKienGopY");
+
+            migrationBuilder.DropTable(
+                name: "HoSoKeKhaiGia");
         }
     }
 }
