@@ -156,15 +156,12 @@
                                 <button type="button" onclick="GetFile('@item.Mahs')" class="btn btn-sm btn-clean btn-icon" title="Giấy tờ kèm theo">
                                     <i class="icon-lg la la-file-alt text-dark"></i>
                                 </button>
-                                @if (item.Trangthai == "CC" || item.Trangthai == "BTL")
+                                @if (item.Trangthai == "CC" || item.Trangthai == "BTL" || item.Trangthai == "CHT")
                                 {
                                     @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.tt", "Edit"))
                                     {
                                         <a asp-controller="ThamDinhGia" asp-action="Edit" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Chỉnh sửa">
                                             <i class="icon-lg la la-edit text-primary"></i>
-                                        </a>
-                                        <a asp-controller="ThamDinhGia" asp-action="EditHoiDong" asp-route-Mahs="@item.Mahs" class="btn btn-sm btn-clean btn-icon" title="Hội đồng thẩm định giá">
-                                            <i class="icon-lg la flaticon-user text-primary"></i>
                                         </a>
                                     }
                                     <button type="button" class="btn btn-sm btn-clean btn-icon" title="Hoàn thành" data-toggle="modal" data-target="#Chuyen_Modal" onclick="Chuyen('@item.Mahs')">

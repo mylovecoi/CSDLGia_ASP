@@ -3,6 +3,7 @@
     var tdgdv = (IEnumerable<ThamDinhGiaDv>)ViewData["TdgDonvi"];
     var tdgdm = (IEnumerable<ThamDinhGiaDmHh>)ViewData["TdgDmHh"];
     var dmnhomhh = (IEnumerable<DmNhomHh>)ViewData["DmNhomHh"];
+    var dmhoidong = (IEnumerable<ThamDinhGiaHD>)ViewData["DmHoiDong"];
 }
 @model CSDLGia_ASP.Models.Manages.ThamDinhGia.ThamDinhGia
 @section custom_style {
@@ -85,6 +86,17 @@
                             @foreach (var item in dmnhomhh)
                             {
                                 <!option value="@item.Manhom" @(Model.Tttstd == item.Manhom ? "selected" : "")>&emsp;@item.Tennhom</!option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="form-group">
+                        <label>Hội đồng thẩm định:<span class="text-danger">*</span></label>
+                        <select class="form-control" asp-for="Maxp">
+                            @foreach (var item in dmhoidong)
+                            {
+                                <!option value="@item.MaHoiDong" @(Model.Maxp == item.MaHoiDong ? "selected" : "")>&emsp;@item.TenHoiDong</!option>
                             }
                         </select>
                     </div>

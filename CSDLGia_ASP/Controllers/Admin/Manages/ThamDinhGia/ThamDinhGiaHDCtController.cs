@@ -60,6 +60,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
 
             string result = "<div class='modal-body' id='edit_thongtin'>";
             result += "<div class='row'>";
+
             result += "<div class='col-xl-12'>";
             result += "<div class='form-group fv-plugins-icon-container'>";
             result += "<label>Họ và tên </label>";
@@ -82,6 +83,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
             result += "<option value='2'>Ủy viên thường trực Hội đồng</option>";
             result += "<option value='3'>Ủy viên</option>";
             result += "</select>";
+            result += "</div>";
             result += "</div>";
 
             result += "<div class='col-xl-6'>";

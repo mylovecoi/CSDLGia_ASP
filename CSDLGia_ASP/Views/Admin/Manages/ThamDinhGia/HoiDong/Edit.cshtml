@@ -35,10 +35,8 @@
         </div>
     </div>
     <!--begin::Form-->
-    <form asp-controller="ThamDinhGia" asp-action="UpdateHoiDong" method="post" enctype="multipart/form-data" id="frm_tdg_update">
+    <form asp-controller="ThamDinhGiaHD" asp-action="StoreOrUpdate" method="post" enctype="multipart/form-data" id="frm_tdg_update">
         <div class="card-body">
-            <input hidden id="Mahs" asp-for="Mahs" />
-
             <div class="row">
                 <div class="col-xl-4">
                     <div class="form-group">
@@ -278,7 +276,7 @@
             </div>
         </div>
         <div class="card-footer" style="text-align:center">
-            <a asp-controller="ThamDinhGia" asp-action="Index" asp-route-Madv="@ViewData["MaDV"]" class="btn btn-danger">
+            <a asp-controller="ThamDinhGiaHD" asp-action="Index" class="btn btn-danger">
                 <i class="la la-reply"></i>Quay lại
             </a>&ensp;
             <button type="submit" class="btn btn-primary mr-2"><i class="la la-check"></i>Hoàn thành</button>
@@ -310,6 +308,7 @@
         </div>
     </div>
 </form>
+
 <!--Delete Modal-->
 <div class="modal fade" id="Delete_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

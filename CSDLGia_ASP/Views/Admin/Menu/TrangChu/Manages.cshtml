@@ -609,6 +609,18 @@
                         </li>
                     }
 
+                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.hd", "Index"))
+                    {
+                        <li class="menu-item" aria-haspopup="true" id="menu_tdg_hd">
+                            <a asp-controller="ThamDinhGiaHD" asp-action="Index" class="menu-link">
+                                <i class="menu-bullet menu-bullet-line">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Hội đồng thẩm định</span>
+                            </a>
+                        </li>
+                    }
+
                     @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdltdg.tdg.tt", "Index"))
                     {
                         <li class="menu-item" aria-haspopup="true" id="menu_tdg_tt">

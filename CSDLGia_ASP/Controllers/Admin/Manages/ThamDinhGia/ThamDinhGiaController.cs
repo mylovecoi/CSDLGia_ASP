@@ -187,6 +187,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
                     ViewData["TdgDonvi"] = _db.ThamDinhGiaDv.ToList();
                     ViewData["TdgDmHh"] = _db.ThamDinhGiaDmHh.Where(t => t.Manhom == model.Tttstd).ToList();
                     ViewData["DmNhomHh"] = _db.DmNhomHh.Where(t => t.Phanloai == "THAMDINHGIA" && t.Theodoi == "TD").ToList();
+                    ViewData["DmHoiDong"] = _db.ThamDinhGiaHD.ToList();
                     ViewData["Dvt"] = _db.DmDvt.ToList();
                     ViewData["Title"] = "Hồ sơ thẩm định giá";
                     ViewData["MenuLv1"] = "menu_tdg";
@@ -233,6 +234,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
                         Mahs = request.Mahs,
                         Madiaban = request.Madiaban,
                         Madv = request.Madv,
+                        Maxp = request.Maxp,
                         Dvyeucau = request.Dvyeucau,
                         Dvthamdinh = request.Dvthamdinh,
                         Hosotdgia = request.Hosotdgia,
@@ -311,56 +313,12 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
                     ViewData["TdgDonvi"] = _db.ThamDinhGiaDv.ToList();
                     ViewData["TdgDmHh"] = _db.ThamDinhGiaDmHh.ToList();
                     ViewData["DmNhomHh"] = _db.DmNhomHh.Where(t => t.Phanloai == "THAMDINHGIA" && t.Theodoi == "TD").ToList();
+                    ViewData["DmHoiDong"] = _db.ThamDinhGiaHD.ToList();
                     ViewData["Dvt"] = _db.DmDvt.ToList();
                     ViewData["Title"] = "Hồ sơ thẩm định giá";
                     ViewData["MenuLv1"] = "menu_tdg";
                     ViewData["MenuLv2"] = "menu_tdg_tt";
                     return View("Views/Admin/Manages/ThamDinhGia/DanhSach/Edit.cshtml", model);
-
-                }
-                else
-                {
-                    ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
-                    return View("Views/Admin/Error/Page.cshtml");
-                }
-            }
-            else
-            {
-                return View("Views/Admin/Error/SessionOut.cshtml");
-            }
-        }
-
-        [Route("ThamDinhGia/DanhSach/EditHoiDong")]
-        [HttpGet]
-        public IActionResult EditHoiDong(string Mahs)
-        {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
-            {
-                if (Helpers.CheckPermission(HttpContext.Session, "csdltdg.tdg.tt", "Edit"))
-                {
-                    var model_hoso = _db.ThamDinhGia.FirstOrDefault(t => t.Mahs == Mahs);
-                    var model = _db.ThamDinhGiaHD.FirstOrDefault(t => t.Mahs == Mahs);
-                    if (model != null)
-                    {
-                        var model_ct = _db.ThamDinhGiaHDCt.Where(t => t.MaHoiDong == model.MaHoiDong).ToList();
-
-
-                        if (model_ct != null && model_ct.Any())
-                            model.ThamDinhGiaHDCt = model_ct;
-                    }
-                    else
-                    {
-                        model = new ThamDinhGiaHD();
-                        model.MaHoiDong = Mahs;
-                        model.Mahs = Mahs;
-                    }
-                    
-
-                    ViewData["MaDV"] = model_hoso.Madv;
-                    ViewData["Title"] = "Thông tin hội đồng thẩm định giá";
-                    ViewData["MenuLv1"] = "menu_tdg";
-                    ViewData["MenuLv2"] = "menu_tdg_tt";
-                    return View("Views/Admin/Manages/ThamDinhGia/DanhSach/HoiDong/Edit.cshtml", model);
 
                 }
                 else
@@ -385,6 +343,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
                 {
 
                     var model = _db.ThamDinhGia.FirstOrDefault(t => t.Mahs == request.Mahs);
+                    model.Maxp = request.Maxp;
                     model.Dvyeucau = request.Dvyeucau;
                     model.Dvthamdinh = request.Dvthamdinh;
                     model.Hosotdgia = request.Hosotdgia;
@@ -411,103 +370,6 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
                     _db.SaveChanges();
 
                     return RedirectToAction("Index", "ThamDinhGia", new { request.Madv });
-                }
-                else
-                {
-                    ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
-                    return View("Views/Admin/Error/Page.cshtml");
-                }
-            }
-            else
-            {
-                return View("Views/Admin/Error/SessionOut.cshtml");
-            }
-        }
-
-        [Route("ThamDinhGia/DanhSach/UpdateHoiDong")]
-        [HttpPost]
-        public IActionResult UpdateHoiDong(CSDLGia_ASP.Models.Manages.ThamDinhGia.ThamDinhGiaHD request)
-        {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
-            {
-                if (Helpers.CheckPermission(HttpContext.Session, "csdltdg.tdg.tt", "Edit"))
-                {
-                    var model_hoso = _db.ThamDinhGia.FirstOrDefault(t => t.Mahs == request.Mahs);
-                    var model = _db.ThamDinhGiaHD.FirstOrDefault(t => t.Mahs == request.Mahs && t.MaHoiDong == request.MaHoiDong);
-
-                    //Xử lý file đính kèm
-                    if (request.FileUpload != null && request.FileUpload.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            request.FileUpload.CopyTo(ms);
-                            var fileBytes = ms.ToArray();
-                            // Chuyển đổi dữ liệu tệp sang base64
-                            request.FileQD_Base64 = Convert.ToBase64String(fileBytes);
-                            request.FileQD = request.FileUpload.FileName;
-                        }
-                    }
-                    else
-                    {
-                        //Giữ thông tin file cũ
-                        if (model != null)
-                        {
-                            request.FileQD_Base64 = model.FileQD_Base64;
-                            request.FileQD = model.FileQD;
-                        }
-                    }
-                         
-                    if (model == null)
-                    {
-                        var newHD = new ThamDinhGiaHD();
-                        newHD.Mahs = request.Mahs;
-                        newHD.MaHoiDong = request.MaHoiDong;
-                        newHD.ToTung = request.ToTung;
-                        newHD.CanCuPhapLy = request.CanCuPhapLy;
-                        newHD.TheoDeNghi = request.TheoDeNghi;
-                        newHD.CapHoiDong = request.CapHoiDong;
-                        newHD.LoaiHoiDong = request.LoaiHoiDong;
-                        newHD.SoQD = request.SoQD;
-                        newHD.NgayQD = request.NgayQD;
-                        newHD.CoQuanBanHanh = request.CoQuanBanHanh;
-                        newHD.TenHoiDong = request.TenHoiDong;
-                        newHD.ChuTichHoiDong = request.ChuTichHoiDong;
-                        newHD.ChucVu = request.ChucVu;
-                        newHD.NhiemVuHoiDong = request.NhiemVuHoiDong;
-                        newHD.NoiDungQD = request.NoiDungQD;
-                        newHD.MaTinhApDung = request.MaTinhApDung;
-                        newHD.MaHuyenApDung = request.MaHuyenApDung;
-                        newHD.FileQD = request.FileQD;
-                        newHD.FileQD_Base64 = request.FileQD_Base64;
-                        _db.ThamDinhGiaHD.Add(newHD);
-                    }
-                    else
-                    {
-                        model.Mahs = request.Mahs;
-                        model.MaHoiDong = request.MaHoiDong;
-                        model.ToTung = request.ToTung;
-                        model.CanCuPhapLy = request.CanCuPhapLy;
-                        model.TheoDeNghi = request.TheoDeNghi;
-                        model.CapHoiDong = request.CapHoiDong;
-                        model.LoaiHoiDong = request.LoaiHoiDong;
-                        model.SoQD = request.SoQD;
-                        model.NgayQD = request.NgayQD;
-                        model.CoQuanBanHanh = request.CoQuanBanHanh;
-                        model.TenHoiDong = request.TenHoiDong;
-                        model.ChuTichHoiDong = request.ChuTichHoiDong;
-                        model.ChucVu = request.ChucVu;
-                        model.NhiemVuHoiDong = request.NhiemVuHoiDong;
-                        model.NoiDungQD = request.NoiDungQD;
-                        model.MaTinhApDung = request.MaTinhApDung;
-                        model.MaHuyenApDung = request.MaHuyenApDung;
-                        model.FileQD = request.FileQD;
-                        model.FileQD_Base64 = request.FileQD_Base64;
-                        _db.ThamDinhGiaHD.Update(model);
-                    }
-                  
-                    _db.SaveChanges();
-
-                    return RedirectToAction("Index", "ThamDinhGia", new { model_hoso.Madv });
                 }
                 else
                 {
