@@ -3,6 +3,7 @@
 @section custom_style {
     <link rel="stylesheet" type="text/css" href="~/Admin/assets/datatables/bootstrap/dataTables.bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Admin/assets/datatables/bootstrap/dataTables.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@@univerjs/preset-sheets-core/lib/index.css" />
 }
 @section custom_script{
     <script src="~/Admin/assets/js/pages/crud/forms/widgets/jquery-mask.js"></script>
@@ -10,10 +11,124 @@
     <script type="text/javascript" src="~/Admin/assets/datatables/bootstrap/dataTables.bootstrap.js"></script>
     <script src="~/Admin/assets/datatables/scripts/table-managed.js"></script>
     <script src="~/Admin/assets/js/pages/crud/forms/widgets/select2.js"></script>
+    <!-- Univer CDN -->
+    <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js"></script>
+    <script src="https://unpkg.com/echarts@5.6.0/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/@@univerjs/presets/lib/umd/index.js"></script>
+    <script src="https://unpkg.com/@@univerjs/preset-sheets-core/lib/umd/index.js"></script>
+    <script src="https://unpkg.com/@@univerjs/preset-sheets-core/lib/umd/locales/en-US.js"></script>
+    <script src="https://unpkg.com/@@univerjs/preset-sheets-core/lib/umd/locales/vi-VN.js"></script>
     <script>
         $(document).ready(function () {
-            TableManaged4.init();
             MoneyDecimalMask();
+        });
+
+        window.addEventListener('load', function () {
+            const appUniver = document.getElementById('app-univer');
+            if (!appUniver) return;
+
+            const { createUniver } = UniverPresets;
+            const { LocaleType, mergeLocales } = UniverCore;
+            const { UniverSheetsCorePreset } = UniverPresetSheetsCore;
+
+            const { univerAPI } = createUniver({
+                locale: LocaleType.EN_US,
+                locales: {
+                    [LocaleType.EN_US]: mergeLocales(UniverPresetSheetsCoreEnUS),
+                    [LocaleType.VI_VN]: mergeLocales(UniverPresetSheetsCoreViVN),
+                },
+                presets: [
+                    UniverSheetsCorePreset({ container: 'app-univer' })
+                ],
+            });
+
+            const mahs = appUniver.dataset.mahs;
+            const $saveBtn = $('#btn-save');
+            const $statusTxt = $('#save-status');
+
+            let isDark = false;
+            $('#btn-theme').on('click', () => {
+                isDark = !isDark;
+                univerAPI.toggleDarkMode(isDark);
+                $('#btn-theme').text(isDark ? "☀️ Light Mode" : "🌙 Dark Mode");
+            });
+
+            let isVi = false;
+            $('#btn-lang').on('click', () => {
+                isVi = !isVi;
+                univerAPI.setLocale(isVi ? LocaleType.VI_VN : LocaleType.EN_US);
+                $('#btn-lang').text(isVi ? "Tiếng Anh" : "Tiếng Việt");
+            });
+
+            const loadData = async () => {
+                try {
+                    $statusTxt.text("Đang tải dữ liệu...");
+                    const res = await fetch(`/GiaNuocSh/GetCodeExcel/${mahs}`);
+                    const data = await res.json();
+                    if (Object.keys(data).length === 0) {
+                        univerAPI.createWorkbook({ name: "Bảng giá nước sinh hoạt" });
+                    } else {
+                        univerAPI.createWorkbook(data);
+                    }
+                    $statusTxt.text("");
+                } catch (err) {
+                    console.error("Lỗi khi load dữ liệu", err);
+                    $statusTxt.text("Lỗi tải dữ liệu!");
+                    univerAPI.createWorkbook({ name: "Bảng giá nước sinh hoạt" });
+                }
+            };
+
+            loadData();
+
+            // Hàm lưu Excel dùng chung
+            const saveExcel = async () => {
+                const snapshot = univerAPI.getActiveWorkbook().save();
+                const res = await fetch(`/GiaNuocSh/SaveCodeExcel/${mahs}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(snapshot)
+                });
+                return res.ok;
+            };
+
+            // Nút Lưu bảng Excel riêng
+            $saveBtn.on('click', async () => {
+                try {
+                    $statusTxt.text('Đang lưu...');
+                    $saveBtn.prop('disabled', true);
+                    const ok = await saveExcel();
+                    if (ok) {
+                        toastr.success('Lưu bảng Excel thành công!', 'Thành công!');
+                        $statusTxt.text('Đã lưu!');
+                        setTimeout(() => $statusTxt.text(''), 3000);
+                    } else {
+                        toastr.error('Có lỗi xảy ra', 'Lỗi!');
+                    }
+                } catch (err) {
+                    console.error('Lỗi save', err);
+                    $statusTxt.text('Lỗi hệ thống!');
+                } finally {
+                    $saveBtn.prop('disabled', false);
+                }
+            });
+
+            // Tự động lưu Excel khi submit form (Thêm mới)
+            const $form = $('#form-tao-hoso');
+            if ($form.length) {
+                $form.on('submit', async function (e) {
+                    e.preventDefault();
+                    try {
+                        $statusTxt.text('Đang chuẩn bị dữ liệu Excel...');
+                        const snapshot = univerAPI.getActiveWorkbook().save();
+                        $('#CodeExcel').val(JSON.stringify(snapshot));
+                    } catch (err) {
+                        console.error('Lỗi chuẩn bị dữ liệu Excel', err);
+                    }
+                    this.submit();
+                });
+            }
         });
     </script>
 }
@@ -29,7 +144,7 @@
         </div>
     </div>
     <!--begin::Form-->
-    <form asp-controller="GiaNuocSh" asp-action="Store" method="post">
+    <form id="form-tao-hoso" asp-controller="GiaNuocSh" asp-action="Store" method="post">
         <div class="card-body">   
             @await Html.PartialAsync("~/Views/Admin/Manages/DinhGia/GiaNuocSh/Detail.cshtml")
         </div>

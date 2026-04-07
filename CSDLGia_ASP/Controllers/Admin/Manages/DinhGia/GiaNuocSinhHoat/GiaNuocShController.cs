@@ -90,12 +90,15 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                 if (Helpers.CheckPermission(HttpContext.Session, "csdlmucgiahhdv.dinhgia.nuocsh.thongtin", "Create"))
                 {
                     var modelcxd = _db.GiaNuocShCt.Where(t => t.Trangthai == "CXD" && t.Madv == Madv);
+
                     if (modelcxd.Any())
                     {
                         _db.GiaNuocShCt.RemoveRange(modelcxd);
                         _db.SaveChanges();
                     }
+
                     var model_file_cxd = _db.ThongTinGiayTo.Where(t => t.Status == "CXD" && t.Madv == Madv);
+
                     if (model_file_cxd.Any())
                     {
                         string wwwRootPath = _hostEnvironment.WebRootPath;
@@ -324,6 +327,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                         Ghichu = request.Ghichu,
                         Trangthai = "CC",
                         Congbo = "CHUACONGBO",
+                        CodeExcel = request.CodeExcel,
                         Created_at = DateTime.Now,
                         Updated_at = DateTime.Now,
                     };
@@ -417,6 +421,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                     model.Thongtin = request.Thongtin;
                     model.Ghichu = request.Ghichu;
                     model.Mota = request.Mota;
+                    model.CodeExcel = request.CodeExcel;
                     model.Updated_at = DateTime.Now;
 
                     var modelct = _db.GiaNuocShCt.Where(t => t.Mahs == request.Mahs);
@@ -515,18 +520,18 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
             {
-               
-                    var model = _db.GiaNuocSh.FirstOrDefault(t => t.Mahs == Mahs);
-                    model.GiaNuocShCt = _db.GiaNuocShCt.Where(t => t.Mahs == model.Mahs).ToList();
 
-                    ViewData["DsDiaBan"] = _db.DsDiaBan.ToList();
-                    ViewData["DsDonVi"] = _db.DsDonVi.ToList();
-                    ViewData["Title"] = "Xem chi tiết giá nước sinh hoạt";
-                    ViewData["MenuLv1"] = "menu_dg";
-                    ViewData["MenuLv2"] = "menu_dgnsh";
-                    ViewData["MenuLv3"] = "menu_dgnsh_tt";
-                    return View("Views/Admin/Manages/DinhGia/GiaNuocSh/Show.cshtml", model);
-               
+                var model = _db.GiaNuocSh.FirstOrDefault(t => t.Mahs == Mahs);
+                model.GiaNuocShCt = _db.GiaNuocShCt.Where(t => t.Mahs == model.Mahs).ToList();
+
+                ViewData["DsDiaBan"] = _db.DsDiaBan.ToList();
+                ViewData["DsDonVi"] = _db.DsDonVi.ToList();
+                ViewData["Title"] = "Xem chi tiết giá nước sinh hoạt";
+                ViewData["MenuLv1"] = "menu_dg";
+                ViewData["MenuLv2"] = "menu_dgnsh";
+                ViewData["MenuLv3"] = "menu_dgnsh_tt";
+                return View("Views/Admin/Manages/DinhGia/GiaNuocSh/Show.cshtml", model);
+
             }
             else
             {
@@ -609,8 +614,8 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                 {
                     var model = _db.GiaNuocSh.FirstOrDefault(p => p.Mahs == mahs_complete);
                     model.Trangthai = trangthai_complete;
-                    model.Updated_at = DateTime.Now;                    
-                    
+                    model.Updated_at = DateTime.Now;
+
                     _db.GiaNuocSh.Update(model);
                     _db.SaveChanges();
                     //Add Log
@@ -757,22 +762,22 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
         public IActionResult ExportToExcel(string Madv, DateTime? NgayTu, DateTime? NgayDen, string Mahs, double DonGiaTu, double DonGiaDen, string Doituongsd)
         {
             var model = (from hosoct in _db.GiaNuocShCt
-                                 join hoso in _db.GiaNuocSh on hosoct.Mahs equals hoso.Mahs
-                                 join donvi in _db.DsDonVi on hoso.Madv equals donvi.MaDv
-                                 select new CSDLGia_ASP.Models.Manages.DinhGia.GiaNuocShCt
-                                 {
-                                     Madv = hoso.Madv,
-                                     Tendv = donvi.TenDv,
-                                     SoQD = hoso.Soqd,
-                                     ThoiDiem = hoso.Thoidiem,
-                                     Doituongsd = hosoct.Doituongsd,
-                                     TyTrongTieuThu = hosoct.TyTrongTieuThu,
-                                     SanLuong = hosoct.SanLuong,
-                                     DonGia1 = hosoct.DonGia1,
-                                     DonGia2 = hosoct.DonGia2,
-                                     Trangthai = hoso.Trangthai,
-                                     Mahs = hoso.Mahs,
-                                 });
+                         join hoso in _db.GiaNuocSh on hosoct.Mahs equals hoso.Mahs
+                         join donvi in _db.DsDonVi on hoso.Madv equals donvi.MaDv
+                         select new CSDLGia_ASP.Models.Manages.DinhGia.GiaNuocShCt
+                         {
+                             Madv = hoso.Madv,
+                             Tendv = donvi.TenDv,
+                             SoQD = hoso.Soqd,
+                             ThoiDiem = hoso.Thoidiem,
+                             Doituongsd = hosoct.Doituongsd,
+                             TyTrongTieuThu = hosoct.TyTrongTieuThu,
+                             SanLuong = hosoct.SanLuong,
+                             DonGia1 = hosoct.DonGia1,
+                             DonGia2 = hosoct.DonGia2,
+                             Trangthai = hoso.Trangthai,
+                             Mahs = hoso.Mahs,
+                         });
 
             List<string> list_trangthai = new List<string> { "HT", "DD", "CB" };
             model = model.Where(t => t.ThoiDiem >= NgayTu && t.ThoiDiem <= NgayDen && t.DonGia1 >= DonGiaTu || t.DonGia2 >= DonGiaTu && list_trangthai.Contains(t.Trangthai));
@@ -894,6 +899,117 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
 
             stream.Position = 0;
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Thông tin tìm kiếm hồ sơ giá nước sinh hoạt.xlsx");
+        }
+
+        [HttpGet("GiaNuocSh/GetCodeExcel/{Mahs}")]
+        public IActionResult GetCodeExcel(string Mahs)
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
+            {
+                var model = _db.GiaNuocSh.FirstOrDefault(t => t.Mahs == Mahs);
+
+                // Nếu đã có dữ liệu thì trả về luôn
+                if (model != null && !string.IsNullOrEmpty(model.CodeExcel))
+                    return Content(model.CodeExcel, "application/json");
+
+
+                // Chưa có dữ liệu → tạo workbook mặc định từ GiaNuocShDmKhung
+                var dmKhung = _db.GiaNuocShDmKhung.OrderBy(t => t.STTSapxep).ToList();
+
+                // Build cellData: key = "rowIndex" (0-based), value = object chứa các cột
+                // Cột 0: STTHienthi, Cột 1: Doituongsd, Cột 2: Dongia1, Cột 3: Dongia2
+                var cellData = new System.Text.StringBuilder();
+                cellData.Append("{");
+
+                // Hàng 0: Header
+                cellData.Append("\"0\":{");
+                cellData.Append("\"0\":{\"v\":\"STT\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
+                cellData.Append("\"1\":{\"v\":\"Mục đích sử dụng\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
+                cellData.Append("\"2\":{\"v\":\"Đơn giá chưa thuế GTGT (đồng/m3)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
+                cellData.Append("\"3\":{\"v\":\"Đơn giá đã bao gồm thuế GTGT (đồng/m3)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}}");
+                cellData.Append("},");
+
+                // Các hàng dữ liệu
+                for (int i = 0; i < dmKhung.Count; i++)
+                {
+                    var item = dmKhung[i];
+                    bool isBold = !string.IsNullOrEmpty(item.Style) && item.Style.Contains("Chữ in đậm");
+                    string styleJson = isBold ? ",\"s\":{\"bl\":1,\"vt\":2,\"tb\":1}" : ",\"s\":{\"vt\":2,\"tb\":1}";
+                    string sttVal = string.IsNullOrEmpty(item.STTHienthi) ? "" : item.STTHienthi.Replace("\"", "\\\"");
+                    string doiTuongVal = string.IsNullOrEmpty(item.Doituongsd) ? "" : item.Doituongsd.Replace("\"", "\\\"");
+
+                    cellData.Append($"\"{i + 1}\":{{");
+                    cellData.Append($"\"0\":{{\"v\":\"{sttVal}\"{styleJson}}},");
+                    cellData.Append($"\"1\":{{\"v\":\"{doiTuongVal}\"{styleJson}}},");
+                    cellData.Append($"\"2\":{{\"v\":\"\"{styleJson}}},");
+                    cellData.Append($"\"3\":{{\"v\":\"\"{styleJson}}}");
+                    cellData.Append("}");
+                    if (i < dmKhung.Count - 1) cellData.Append(",");
+                }
+
+                cellData.Append("}");
+
+                int totalRows = dmKhung.Count + 1;
+
+                // Tăng chiều rộng cột để hiển thị đủ nội dung
+                string defaultWorkbook = $@"{{
+                                              ""id"": ""{Mahs}"",
+                                              ""name"": ""Bảng giá nước sinh hoạt"",
+                                              ""sheetOrder"": [""sheet1""],
+                                              ""sheets"": {{
+                                                ""sheet1"": {{
+                                                  ""id"": ""sheet1"",
+                                                  ""name"": ""Sheet1"",
+                                                  ""rowCount"": {Math.Max(totalRows + 20, 50)},
+                                                  ""columnCount"": 10,
+                                                  ""cellData"": {cellData},
+                                                  ""rowData"": {{
+                                                    ""0"": {{""h"": 80}}
+                                                  }},
+                                                  ""columnData"": {{
+                                                    ""0"": {{""w"": 60}},
+                                                    ""1"": {{""w"": 500}},
+                                                    ""2"": {{""w"": 300}},
+                                                    ""3"": {{""w"": 300}}
+                                                  }}
+                                                }}
+                                              }},
+                                              ""locale"": ""vi-VN""
+                                            }}";
+
+                return Content(defaultWorkbook, "application/json");
+            }
+            else
+            {
+                return Json(new { status = "error", message = "Phiên đăng nhập kết thúc, Bạn cần đăng nhập lại!!!" });
+            }
+        }
+
+
+        [HttpPost("GiaNuocSh/SaveCodeExcel/{Mahs}")]
+        public async Task<IActionResult> SaveCodeExcel(string Mahs)
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
+            {
+                var model = _db.GiaNuocSh.FirstOrDefault(t => t.Mahs == Mahs);
+                if (model == null) return NotFound(new { success = false, message = "Report not found" });
+
+                using (var reader = new StreamReader(Request.Body))
+                {
+                    var jsonString = await reader.ReadToEndAsync();
+                    model.CodeExcel = jsonString;
+                    model.Updated_at = DateTime.Now;
+
+                    _db.GiaNuocSh.Update(model);
+                    _db.SaveChanges();
+                }
+
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { status = "error", message = "Phiên đăng nhập kết thúc, Bạn cần đăng nhập lại!!!" });
+            }
         }
 
         [HttpPost("GiaNuocSh/GetListHoSo")]
