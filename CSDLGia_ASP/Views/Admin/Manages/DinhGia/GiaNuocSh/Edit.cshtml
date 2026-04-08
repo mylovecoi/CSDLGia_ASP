@@ -40,7 +40,10 @@
                     [LocaleType.VI_VN]: mergeLocales(UniverPresetSheetsCoreViVN),
                 },
                 presets: [
-                    UniverSheetsCorePreset({ container: 'app-univer' })
+                    UniverSheetsCorePreset({ 
+                        container: 'app-univer',
+                        footer: false // tắt footer để ko hiển thị thêm sheet
+                    })
                 ],
             });
 
@@ -114,10 +117,29 @@
                 }
             });
 
+            // Import Excel
+            $('#btn-import-excel').on('click', () => {
+                $('#file-import-excel').click();
+            });
+
+            window.univerAPIInstance = univerAPI;
+
+            $('#file-import-excel').on('change', function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                handleExcelFileSelect(file, $statusTxt);
+                $(this).val(''); // Reset input
+            });
+
             // Tự động lưu Excel khi submit form (Cập nhật)
             const $form = $('#form-capnhat-hoso');
             if ($form.length) {
                 $form.on('submit', async function (e) {
+                    if (!this.checkValidity()) {
+                        this.reportValidity();
+                        e.preventDefault();
+                        return;
+                    }
                     e.preventDefault();
                     try {
                         $statusTxt.text('Đang chuẩn bị dữ liệu Excel...');

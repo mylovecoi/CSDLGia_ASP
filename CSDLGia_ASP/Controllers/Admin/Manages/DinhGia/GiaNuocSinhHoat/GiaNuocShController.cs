@@ -12,6 +12,8 @@ using System;
 using System.Linq;
 using CSDLGia_ASP.ViewModels.Systems;
 using CSDLGia_ASP.Models.Systems;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
 using OfficeOpenXml.Style;
@@ -349,6 +351,10 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                     }
                     _db.GiaNuocSh.Add(model);
                     _db.SaveChanges();
+
+                    // Sync spreadsheet to GiaNuocShCt
+                    SaveSpreadsheetToCt(model.Mahs, model.Madv, model.CodeExcel);
+                    _db.SaveChanges();
                     //Add Log
                     _trangThaiHoSoService.LogHoSo(model.Mahs, Helpers.GetSsAdmin(HttpContext.Session, "Name"), "Thêm mới");
 
@@ -441,6 +447,11 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                     }
                     _db.GiaNuocSh.Update(model);
                     _db.SaveChanges();
+
+                    // Sync spreadsheet to GiaNuocShCt
+                    SaveSpreadsheetToCt(model.Mahs, model.Madv, model.CodeExcel);
+                    _db.SaveChanges();
+
                     //Add Log
                     _trangThaiHoSoService.LogHoSo(model.Mahs, Helpers.GetSsAdmin(HttpContext.Session, "Name"), "Cập nhật");
                     // Lưu vết từng tài khoản đăng nhập theo thời gian truy cập vào hệ thống 
@@ -925,8 +936,10 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                 cellData.Append("\"0\":{");
                 cellData.Append("\"0\":{\"v\":\"STT\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
                 cellData.Append("\"1\":{\"v\":\"Mục đích sử dụng\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
-                cellData.Append("\"2\":{\"v\":\"Đơn giá chưa thuế GTGT (đồng/m3)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
-                cellData.Append("\"3\":{\"v\":\"Đơn giá đã bao gồm thuế GTGT (đồng/m3)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}}");
+                cellData.Append("\"2\":{\"v\":\"Tỷ trọng tiêu thụ (%)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
+                cellData.Append("\"3\":{\"v\":\"Sản lượng (m3)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
+                cellData.Append("\"4\":{\"v\":\"Đơn giá chưa thuế GTGT (đồng/m3)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}},");
+                cellData.Append("\"5\":{\"v\":\"Đơn giá đã bao gồm thuế GTGT (đồng/m3)\",\"s\":{\"bl\":1,\"ht\":2,\"vt\":2,\"tb\":1}}");
                 cellData.Append("},");
 
                 // Các hàng dữ liệu
@@ -942,7 +955,9 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                     cellData.Append($"\"0\":{{\"v\":\"{sttVal}\"{styleJson}}},");
                     cellData.Append($"\"1\":{{\"v\":\"{doiTuongVal}\"{styleJson}}},");
                     cellData.Append($"\"2\":{{\"v\":\"\"{styleJson}}},");
-                    cellData.Append($"\"3\":{{\"v\":\"\"{styleJson}}}");
+                    cellData.Append($"\"3\":{{\"v\":\"\"{styleJson}}},");
+                    cellData.Append($"\"4\":{{\"v\":\"\"{styleJson}}},");
+                    cellData.Append($"\"5\":{{\"v\":\"\"{styleJson}}}");
                     cellData.Append("}");
                     if (i < dmKhung.Count - 1) cellData.Append(",");
                 }
@@ -968,9 +983,11 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
                                                   }},
                                                   ""columnData"": {{
                                                     ""0"": {{""w"": 60}},
-                                                    ""1"": {{""w"": 500}},
-                                                    ""2"": {{""w"": 300}},
-                                                    ""3"": {{""w"": 300}}
+                                                    ""1"": {{""w"": 400}},
+                                                    ""2"": {{""w"": 150}},
+                                                    ""3"": {{""w"": 150}},
+                                                    ""4"": {{""w"": 200}},
+                                                    ""5"": {{""w"": 200}}
                                                   }}
                                                 }}
                                               }},
@@ -1012,6 +1029,85 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
             }
         }
 
+        [HttpPost("GiaNuocSh/ConvertExcelToUniver")]
+        public async Task<IActionResult> ConvertExcelToUniver(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return Json(new { status = "error", message = "File không hợp lệ" });
+
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    await file.CopyToAsync(stream);
+                    using (var package = new ExcelPackage(stream))
+                    {
+                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Lấy sheet đầu tiên
+                        if (worksheet.Dimension == null)
+                             return Json(new { status = "error", message = "File Excel không có dữ liệu" });
+
+                        var rowCount = worksheet.Dimension.Rows;
+                        var colCount = worksheet.Dimension.Columns;
+
+                        var cellData = new StringBuilder();
+                        cellData.Append("{");
+
+                        for (int row = 1; row <= rowCount; row++)
+                        {
+                            cellData.Append($"\"{row - 1}\":{{");
+                            bool hasCell = false;
+                            for (int col = 1; col <= colCount; col++)
+                            {
+                                var cell = worksheet.Cells[row, col];
+                                if (cell.Value != null)
+                                {
+                                    if (hasCell) cellData.Append(",");
+                                    string val = cell.Value.ToString().Replace("\"", "\\\"");
+                                    bool isBold = cell.Style.Font.Bold;
+                                    string styleJson = isBold ? ",\"s\":{\"bl\":1,\"vt\":2,\"tb\":1}" : ",\"s\":{\"vt\":2,\"tb\":1}";
+                                    
+                                    cellData.Append($"\"{col - 1}\":{{\"v\":\"{val}\"{styleJson}}}");
+                                    hasCell = true;
+                                }
+                            }
+                            cellData.Append("}");
+                            if (row < rowCount) cellData.Append(",");
+                        }
+                        cellData.Append("}");
+
+                        string workbookJson = $@"{{
+                            ""id"": ""imported_{DateTime.Now.Ticks}"",
+                            ""name"": ""Imported Sheet"",
+                            ""sheetOrder"": [""sheet1""],
+                            ""sheets"": {{
+                                ""sheet1"": {{
+                                    ""id"": ""sheet1"",
+                                    ""name"": ""Sheet1"",
+                                    ""rowCount"": {Math.Max(rowCount + 20, 50)},
+                                    ""columnCount"": {Math.Max(colCount + 5, 10)},
+                                    ""cellData"": {cellData},
+                                    ""columnData"": {{
+                                        ""0"": {{""w"": 60}},
+                                        ""1"": {{""w"": 500}},
+                                        ""2"": {{""w"": 300}},
+                                        ""3"": {{""w"": 300}}
+                                    }}
+                                }}
+                            }},
+                            ""locale"": ""vi-VN""
+                        }}";
+
+                        return Content(workbookJson, "application/json");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "error", message = "Lỗi khi xử lý file: " + ex.Message });
+            }
+        }
+
         [HttpPost("GiaNuocSh/GetListHoSo")]
         public JsonResult GetListHoSo(DateTime ngaytu, DateTime ngayden)
         {
@@ -1037,6 +1133,117 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.DinhGia.GiaNuocSinhHoat
             {
                 var data = new { status = "error", message = "Phiên đăng nhập kết thúc, Bạn cần đăng nhập lại!!!" };
                 return Json(data);
+            }
+        }
+
+        private void SaveSpreadsheetToCt(string mahs, string madv, string codeExcel)
+        {
+            if (string.IsNullOrEmpty(codeExcel)) return;
+
+            try
+            {
+                var data = JObject.Parse(codeExcel);
+                var sheets = data["sheets"];
+                if (sheets == null) return;
+
+                // Lấy sheet đầu tiên
+                var firstSheet = sheets.Children<JProperty>().FirstOrDefault()?.Value;
+                if (firstSheet == null) return;
+
+                var cellData = firstSheet["cellData"];
+                if (cellData == null) return;
+
+                // Xóa dữ liệu cũ của hồ sơ này
+                var dataOld = _db.GiaNuocShCt.Where(t => t.Mahs == mahs);
+                _db.GiaNuocShCt.RemoveRange(dataOld);
+
+                var listCt = new List<GiaNuocShCt>();
+                var rowKeys = cellData.Children<JProperty>()
+                    .Select(p => {
+                        int r;
+                        return int.TryParse(p.Name, out r) ? (int?)r : null;
+                    })
+                    .Where(r => r.HasValue)
+                    .Select(r => r.Value)
+                    .OrderBy(k => k);
+
+                // Xác định chỉ số cột dựa trên tiêu đề (dòng 0)
+                int idxStt = 0;
+                int idxDoituong = 1;
+                int idxTyTrong = 2;
+                int idxSanLuong = 3;
+                int idxGia1 = 4;
+                int idxGia2 = 5;
+
+                var headerRow = cellData["0"];
+                if (headerRow != null)
+                {
+                    foreach (JProperty col in headerRow.Children<JProperty>())
+                    {
+                        string headerText = col.Value["v"]?.ToString()?.ToLower() ?? "";
+                        int colIdx = int.Parse(col.Name);
+
+                        if (headerText.Contains("stt") || headerText.Contains("thứ tự")) idxStt = colIdx;
+                        else if (headerText.Contains("đối tượng") || headerText.Contains("mục đích")) idxDoituong = colIdx;
+                        else if (headerText.Contains("tỷ trọng") || headerText.Contains("tỷ lệ")) idxTyTrong = colIdx;
+                        else if (headerText.Contains("sản lượng")) idxSanLuong = colIdx;
+                        else if (headerText.Contains("đơn giá") && (headerText.Contains("chưa") || headerText.Contains("trước"))) idxGia1 = colIdx;
+                        else if (headerText.Contains("đơn giá") && (headerText.Contains("có") || headerText.Contains("sau") || headerText.Contains("bao gồm"))) idxGia2 = colIdx;
+                    }
+                }
+
+                foreach (var rowIndex in rowKeys)
+                {
+                    if (rowIndex == 0) continue; // Bỏ qua tiêu đề
+
+                    var rowData = cellData[rowIndex.ToString()];
+                    if (rowData == null) continue;
+
+                    var sttVal = rowData[idxStt.ToString()]?["v"]?.ToString() ?? "";
+                    var doituong = rowData[idxDoituong.ToString()]?["v"]?.ToString() ?? "";
+
+                    if (string.IsNullOrEmpty(doituong)) continue;
+
+                    double gia1 = 0;
+                    double gia2 = 0;
+                    int sttSapXep = 0;
+
+                    var tytrong = rowData[idxTyTrong.ToString()]?["v"]?.ToString() ?? "";
+                    var sanluong = rowData[idxSanLuong.ToString()]?["v"]?.ToString() ?? "";
+                    var vFull1 = rowData[idxGia1.ToString()]?["v"]?.ToString();
+                    var vFull2 = rowData[idxGia2.ToString()]?["v"]?.ToString();
+
+                    if (!string.IsNullOrEmpty(vFull1)) double.TryParse(vFull1, out gia1);
+                    if (!string.IsNullOrEmpty(vFull2)) double.TryParse(vFull2, out gia2);
+                    // sttSapXep = rowIndex; 
+                    sttSapXep = rowIndex; 
+
+                    listCt.Add(new GiaNuocShCt
+                    {
+                        Mahs = mahs,
+                        Madv = madv,
+                        STTHienthi = sttVal,
+                        STTSapxep = sttSapXep,
+                        Doituongsd = doituong,
+                        DonGia1 = gia1,
+                        DonGia2 = gia2,
+                        TyTrongTieuThu = tytrong,
+                        SanLuong = sanluong,
+                        Created_at = DateTime.Now,
+                        Updated_at = DateTime.Now,
+                        Trangthai = "XD"
+                    });
+                }
+
+                if (listCt.Any())
+                {
+                    _db.GiaNuocShCt.AddRange(listCt);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Có thể log lỗi ở đây nếu cần
+                Console.WriteLine("Error syncing spreadsheet: " + ex.Message);
             }
         }
     }

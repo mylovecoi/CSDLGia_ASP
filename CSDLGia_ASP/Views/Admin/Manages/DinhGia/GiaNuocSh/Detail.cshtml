@@ -29,7 +29,7 @@
     <div class="col-xl-12">
         <div class="form-group">
             <label>Nội dung:<span class="text-danger">*</span></label>
-            <textarea type="text" class="form-control" asp-for="Mota" rows="2"></textarea>
+            <textarea type="text" class="form-control" asp-for="Mota" rows="2" required></textarea>
         </div>
     </div>
 </div>
@@ -45,13 +45,204 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
                 <span id="save-status" class="text-muted me-3"></span>
-                @* <button id="btn-theme" class="btn btn-outline-dark btn-sm me-2">🌙 Dark Mode</button>
-                <button id="btn-lang" class="btn btn-outline-info btn-sm me-2">Tiếng Việt</button>
-                <button id="btn-save" type="button" class="btn btn-success btn-sm">
+                <button id="btn-import-excel" type="button" class="btn btn-info btn-sm me-2">
+                    <i class="fas fa-file-excel"></i> Nhận file Excel
+                </button>
+                <a href="~/UpLoad/File/DinhGia/Excel/FileExcelGianuocsh.xlsm" target="_blank" class="btn btn-outline-primary btn-sm me-2"
+                   onclick="window.open(this.href, 'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;">
+                    <i class="fas fa-download"></i> Tải file mẫu
+                </a>
+                <input type="file" id="file-import-excel" accept=".xls,.xlsx,.xlsm" style="display: none;" />
+                <!-- <button id="btn-save" type="button" class="btn btn-success btn-sm">
                     <i class="fas fa-save"></i> Lưu bảng Excel
-                </button> *@
+                </button> -->
             </div>
         </div>
+        <!-- SheetJS for Excel Support (.xls, .xlsx, .xlsm) -->
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+        <script>
+            let currentWorkbook = null;
+            window.univerAPIInstance = null; // Sẽ được gán từ Create/Edit view
+
+            /**
+             * Chuyển đổi dữ liệu từ SheetJS sang định dạng Univer JSON
+             */
+            function convertSheetJsToUniver(worksheet, fromRow, toRow) {
+                if (!worksheet || !worksheet['!ref']) return null;
+                const range = XLSX.utils.decode_range(worksheet['!ref']);
+                
+                let startRow = range.s.r;
+                let endRow = range.e.r;
+                
+                if (fromRow && fromRow > 0) startRow = Math.max(range.s.r, fromRow - 1);
+                if (toRow && toRow > 0) endRow = Math.min(range.e.r, toRow - 1);
+
+                const cellData = {};
+                for (let r = startRow; r <= endRow; r++) {
+                    const univerR = r - startRow;
+                    cellData[univerR] = {};
+                    for (let c = range.s.c; c <= range.e.c; c++) {
+                        const cellAddress = XLSX.utils.encode_cell({ r: r, c: c });
+                        const cell = worksheet[cellAddress];
+                        if (cell) {
+                            cellData[univerR][c] = {
+                                v: (cell.v !== undefined ? cell.v : "").toString(),
+                                s: { vt: 2, tb: 1 } // Mặc định căn giữa dọc và ngắt dòng
+                            };
+                        }
+                    }
+                }
+                const actualRowCount = Math.max(0, endRow - startRow + 1);
+                const colCount = range.e.c + 1;
+                return {
+                    id: 'imported_' + Date.now(),
+                    name: 'Bảng giá nhập khẩu',
+                    sheetOrder: ['sheet1'],
+                    sheets: {
+                        'sheet1': {
+                            id: 'sheet1',
+                            name: 'Sheet1',
+                            cellData: cellData,
+                            rowCount: Math.max(actualRowCount + 20, 50),
+                            columnCount: Math.max(colCount + 5, 10),
+                            columnData: {
+                                "0": { "w": 60 },
+                                "1": { "w": 400 },
+                                "2": { "w": 150 },
+                                "3": { "w": 150 },
+                                "4": { "w": 200 },
+                                "5": { "w": 200 }
+                            },
+                            rowData: {
+                                "0": { "h": 80 }
+                            }
+                        }
+                    },
+                    locale: 'vi-VN'
+                };
+            }
+
+            /**
+             * Xử lý file khi chọn
+             */
+            function handleExcelFileSelect(file, $statusTxt) {
+                const reader = new FileReader();
+                if ($statusTxt) $statusTxt.text("Đang tải file...");
+                reader.onload = (e) => {
+                    try {
+                        if ($statusTxt) $statusTxt.text("Đang đọc danh sách sheet...");
+                        const data = new Uint8Array(e.target.result);
+                        currentWorkbook = XLSX.read(data, { type: 'array' });
+                        
+                        // Đổ danh sách sheet vào select
+                        const $select = $('#excel-sheet-select');
+                        $select.empty();
+                        currentWorkbook.SheetNames.forEach(name => {
+                            $select.append(`<option value="${name}">${name}</option>`);
+                        });
+                        
+                        // Reset input dòng
+                        $('#excel-row-from').val('');
+                        $('#excel-row-to').val('');
+                        
+                        // Hiện modal
+                        $('#modal-excel-options').modal('show');
+                        if ($statusTxt) $statusTxt.text("");
+                    } catch (err) {
+                        console.error("Lỗi đọc Excel", err);
+                        alert("Lỗi khi đọc file Excel: " + err.message);
+                        if ($statusTxt) $statusTxt.text("");
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+
+            window.addEventListener('load', function() {
+                if (typeof jQuery === 'undefined') {
+                    console.error("jQuery is not loaded! Excel import will not work.");
+                    return;
+                }
+                const $ = jQuery;
+
+                // Sự kiện nút xác nhận trong modal
+                $('#btn-confirm-import').off('click').on('click', function() {
+                    if (!currentWorkbook) {
+                        alert("Không tìm thấy dữ liệu Excel. Vui lòng chọn file lại.");
+                        return;
+                    }
+                    
+                    const sheetName = $('#excel-sheet-select').val();
+                    const fromRow = $('#excel-row-from').val() ? parseInt($('#excel-row-from').val()) : 0;
+                    const toRow = $('#excel-row-to').val() ? parseInt($('#excel-row-to').val()) : 0;
+                    
+                    const worksheet = currentWorkbook.Sheets[sheetName];
+                    const univerData = convertSheetJsToUniver(worksheet, fromRow, toRow);
+                    
+                    if (univerData) {
+                        if (window.univerAPIInstance) {
+                            try {
+                                window.univerAPIInstance.createWorkbook(univerData);
+                                $('#save-status').text("Nhận dữ liệu từ sheet [" + sheetName + "] thành công!");
+                                setTimeout(() => $('#save-status').text(""), 3000);
+                            } catch (e) {
+                                console.error(e);
+                                alert("Lỗi khi đổ dữ liệu vào bảng: " + e.message);
+                            }
+                        } else {
+                            alert("Hệ thống bảng tính chưa sẵn sàng. Vui lòng thử lại sau giây lát.");
+                        }
+                    } else {
+                        alert("Không thể chuyển đổi dữ liệu từ sheet này.");
+                    }
+                    
+                    $('#modal-excel-options').modal('hide');
+                });
+            });
+        </script>
+        <style>
+            #app-univer {
+                width: 100%;
+                height: 700px;
+            }
+        </style>
         <div id="app-univer" data-mahs="@Model.Mahs" style="width: 100%; height: 85vh; border: 1px solid #ccc; border-radius: 4px;"></div>
+    </div>
+</div>
+
+<!-- Modal chọn Sheet và Dòng -->
+<div class="modal fade" id="modal-excel-options" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" style="z-index: 9999;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Tùy chọn nhập Excel</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Chọn Sheet:</label>
+                    <select id="excel-sheet-select" class="form-control"></select>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Từ dòng:</label>
+                            <input type="number" id="excel-row-from" class="form-control" placeholder="Ví dụ: 1" min="1" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Đến dòng:</label>
+                            <input type="number" id="excel-row-to" class="form-control" placeholder="Để trống nếu lấy hết" min="1" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" id="btn-confirm-import" class="btn btn-primary">Nhận dữ liệu</button>
+            </div>
+        </div>
     </div>
 </div>
