@@ -20,7 +20,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
 
         [Route("ThamDinhGiaHDCt/Store")]
         [HttpPost]
-        public JsonResult Store(string Mahs, string MaHoiDong, int STT, string HoTen, string ChucVu, int VaiTro, int Id)
+        public JsonResult Store(string Mahs, string MaHoiDong, int STT, string HoTen, string ChucVu, string VaiTro, int Id)
         {
             var model = _db.ThamDinhGiaHDCt.FirstOrDefault(x => x.Id == Id);
             if (model == null)
@@ -61,30 +61,39 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
             string result = "<div class='modal-body' id='edit_thongtin'>";
             result += "<div class='row'>";
 
-            result += "<div class='col-xl-12'>";
+            
+
+            result += "<div class='col-xl-6'>";
             result += "<div class='form-group fv-plugins-icon-container'>";
             result += "<label>Họ và tên </label>";
             result += "<input type='text' name='HoTen' value='" + (model?.HoTen ?? "") + "' class='form-control'/>";
             result += "</div>";
             result += "</div>";
 
-            result += "<div class='col-xl-12'>";
+            result += "<div class='col-xl-6'>";
             result += "<div class='form-group fv-plugins-icon-container'>";
             result += "<label>Chức vụ</label>";
             result += "<input type='text' name='ChucVu' value='" + (model?.ChucVu ?? "") + "' class='form-control'/>";
             result += "</div>";
             result += "</div>";
-
-            result += "<div class='col-xl-12'>";
+            
+            result += "<div class='col-xl-6'>";
             result += "<div class='form-group fv-plugins-icon-container'>";
             result += "<label>Vai trò</label>";
-            result += "<select name='VaiTro' class='form-control'>";
-            result += "<option value='1'>Phó chủ tịch hội đồng</option>";
-            result += "<option value='2'>Ủy viên thường trực Hội đồng</option>";
-            result += "<option value='3'>Ủy viên</option>";
-            result += "</select>";
+            result += "<input type='text' name='VaiTro' value='" + (model?.VaiTro ?? "") + "' class='form-control'/>";
             result += "</div>";
             result += "</div>";
+
+            //result += "<div class='col-xl-'>";
+            //result += "<div class='form-group fv-plugins-icon-container'>";
+            //result += "<label>Vai trò</label>";
+            //result += "<select name='VaiTro' class='form-control'>";
+            //result += "<option value='1'>Phó chủ tịch hội đồng</option>";
+            //result += "<option value='2'>Ủy viên thường trực Hội đồng</option>";
+            //result += "<option value='3'>Ủy viên</option>";
+            //result += "</select>";
+            //result += "</div>";
+            //result += "</div>";
 
             result += "<div class='col-xl-6'>";
             result += "<div class='form-group fv-plugins-icon-container'>";
@@ -118,10 +127,10 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
         public string GetData(string Mahs, string MaHoiDong)
         {
             var model = _db.ThamDinhGiaHDCt.Where(t => t.MaHoiDong == MaHoiDong).ToList();
-            Dictionary<int, string> vaiTro = new Dictionary<int, string>();
-            vaiTro[1] = "Phó chủ tịch hội đồng";
-            vaiTro[2] = "Ủy viên thường trực Hội đồng";
-            vaiTro[3] = "Ủy viên";
+            //Dictionary<int, string> vaiTro = new Dictionary<int, string>();
+            //vaiTro[1] = "Phó chủ tịch hội đồng";
+            //vaiTro[2] = "Ủy viên thường trực Hội đồng";
+            //vaiTro[3] = "Ủy viên";
 
 
             string result = "<div class='card-body' id='frm_data'>";
@@ -139,14 +148,14 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
 
             foreach (var item in model)
             {
-                string _vaiTro;
-                TryGetKey(vaiTro, item.VaiTro, out _vaiTro);
+                //string _vaiTro;
+                //TryGetKey(vaiTro, item.VaiTro, out _vaiTro);
 
                 result += "<tr>";
                 result += "<td style='text-align:center'>" + item.STT + "</td>";
                 result += "<td>" + item.HoTen + "</td>";
                 result += "<td>" + item.ChucVu + "</td>";
-                result += "<td>" + _vaiTro + "</td>";
+                result += "<td>" + item.VaiTro + "</td>";
                 result += "<td>";
                 result += "<button type='button' class='btn btn-sm btn-clean btn-icon' title='Chỉnh sửa'";
                 result += " data-target='#Edit_Modal' data-toggle='modal' onclick='SetEdit(`" + item.Id + "`)'>";

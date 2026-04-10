@@ -139,7 +139,7 @@
                 <div class="col-xl-4">
                     <div class="form-group">
                         <label>Phân loại hội đồng</label>
-                        <select asp-for="ToTung" class="form-control">
+                        <select asp-for="LoaiHoiDong" class="form-control">
                             <option value="1">Hội đồng theo vụ việc</option>
                             <option value="2">Hội đồng thường xuyên</option>
                         </select>
@@ -240,17 +240,17 @@
                                                 <td>@item.HoTen</td>
                                                 <td>@item.ChucVu</td>
                                                 <td>
-                                                    @if (item.VaiTro == 1)
+                                                    @if (item.VaiTro == "1")
                                                     {
                                                         <span>Phó chủ tịch Hội đồng </span>
-                                                    }
-                                                    @if (item.VaiTro == 2)
+                                                    }else if (item.VaiTro == "2")
                                                     {
                                                         <span>Ủy viên thường trực Hội đồng</span>
-                                                    }
-                                                    @if (item.VaiTro == 3)
+                                                    }else if (item.VaiTro == "3")
                                                     {
                                                         <span>Ủy viên</span>
+                                                    }else{
+                                                        <span>@item.VaiTro</span>
                                                     }
                                                 </td>
                                                 <td>

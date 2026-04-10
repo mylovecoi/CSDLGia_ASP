@@ -224,5 +224,34 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
                 return View("Views/Admin/Error/SessionOut.cshtml");
             }
         }
+
+        [Route("ThamDinhGia/HoiDong/Show")]
+        [HttpGet]
+        public IActionResult Show(string MaHoiDong)
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("SsAdmin")))
+            {
+                if (Helpers.CheckPermission(HttpContext.Session, "csdltdg.tdg.hd", "Index"))
+                {
+                    var model = _db.ThamDinhGiaHD.FirstOrDefault(t => t.MaHoiDong == MaHoiDong);
+                    model.ThamDinhGiaHDCt = _db.ThamDinhGiaHDCt.Where(t => t.MaHoiDong == model.MaHoiDong).ToList();
+
+                    ViewData["Title"] = "Thông tin chi tiết hội đồng thẩm định giá";
+                    ViewData["MenuLv1"] = "menu_tdg";
+                    ViewData["MenuLv2"] = "menu_tdg_hd";
+                    return View("Views/Admin/Manages/ThamDinhGia/HoiDong/Show.cshtml", model);
+
+                }
+                else
+                {
+                    ViewData["Messages"] = "Bạn không có quyền truy cập vào chức năng này!";
+                    return View("Views/Admin/Error/Page.cshtml");
+                }
+            }
+            else
+            {
+                return View("Views/Admin/Error/SessionOut.cshtml");
+            }
+        }
     }
 }

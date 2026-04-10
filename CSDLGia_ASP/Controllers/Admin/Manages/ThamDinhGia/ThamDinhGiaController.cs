@@ -397,14 +397,6 @@ namespace CSDLGia_ASP.Controllers.Admin.Manages.ThamDinhGia
                     var model_ct = _db.ThamDinhGiaCt.Where(t => t.Mahs == model.Mahs);
                     _db.ThamDinhGiaCt.RemoveRange(model_ct);
 
-                    var model_hd = _db.ThamDinhGiaHD.FirstOrDefault(t => t.Mahs == model.Mahs);
-                    _db.ThamDinhGiaHD.Remove(model_hd);
-                    if (model_hd != null)
-                    {
-                        var model_hdct = _db.ThamDinhGiaHDCt.Where(t => t.MaHoiDong == model_hd.MaHoiDong);
-                        _db.ThamDinhGiaHDCt.RemoveRange(model_hdct);
-                    }
-
                     _db.SaveChanges();
 
                     return RedirectToAction("Index", "ThamDinhGia", new { model.Madv });

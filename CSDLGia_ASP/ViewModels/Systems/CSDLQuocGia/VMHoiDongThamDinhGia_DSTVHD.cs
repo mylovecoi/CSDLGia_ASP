@@ -7,6 +7,6 @@ namespace CSDLGia_ASP.ViewModels.Systems.CSDLQuocGia
     {
         public string HO_TEN { get; set; }
         public string CHUC_VU { get; set; }
-        public int VAI_TRO { get; set; }
+        public string VAI_TRO { get; set; }
     }
 }

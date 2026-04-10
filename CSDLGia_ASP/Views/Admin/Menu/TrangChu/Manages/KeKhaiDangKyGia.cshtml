@@ -35,7 +35,7 @@
             <i class="menu-arrow"></i>
             <ul class="menu-subnav">
                 @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtindonvi", "Index")
-                     && Helpers.GetSsAdmin(HttpContextAccessor.HttpContext.Session, "Level") == "DN")
+                                                     && Helpers.GetSsAdmin(HttpContextAccessor.HttpContext.Session, "Level") == "DN")
                 {
                     <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtindonvi">
                         <a asp-controller="TtDnTd" asp-action="Index" class="menu-link menu-toggle">
@@ -90,9 +90,9 @@
                         </a>
                     </li>
                 }
-                @foreach (var item in DanhSachNgheKd)
+                @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtin", "Index"))
                 {
-                    @if (Helpers.CheckPermission(HttpContextAccessor.HttpContext.Session, "csdlmucgiahhdv.kekhaidangkygia.thongtin", "Index"))
+                    @foreach (var item in DanhSachNgheKd.OrderByDescending(t=>t.Manganh))
                     {
                         <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtin_@item.Manghe">
                             <a asp-controller="KeKhaiDangKyGiaCsKd" asp-action="Index" asp-route-MaNghe="@item.Manghe" class="menu-link">
@@ -103,6 +103,81 @@
                             </a>
                         </li>
                     }
+                    @* <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtin">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-bullet menu-bullet-line">
+                                <span></span>
+                            </i>
+                            <span class="menu-text">HH-DV thuộc danh mục HH-DV bình ổn giá</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                @foreach (var item in DanhSachNgheKd.Where(t => t.Manganh == "BOG"))
+                                {
+                                    <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtin_@item.Manghe">
+                                        <a asp-controller="KeKhaiDangKyGiaCsKd" asp-action="Index" asp-route-MaNghe="@item.Manghe" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text">@item.Tennghe</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtin">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-bullet menu-bullet-line">
+                                <span></span>
+                            </i>
+                            <span class="menu-text">HH-DV thiết yếu khác do Chính phủ ban hành</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                @foreach (var item in DanhSachNgheKd.Where(t => t.Manganh == "CP"))
+                                {
+                                    <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtin_@item.Manghe">
+                                        <a asp-controller="KeKhaiDangKyGiaCsKd" asp-action="Index" asp-route-MaNghe="@item.Manghe" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text">@item.Tennghe</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtin">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-bullet menu-bullet-line">
+                                <span></span>
+                            </i>
+                            <span class="menu-text">HH-DV đặc thù thực hiện kê khai giá</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                @foreach (var item in DanhSachNgheKd.Where(t => t.Manganh == "KKNYGIA"))
+                                {
+                                    <li class="menu-item" aria-haspopup="true" id="menu_kekhaidangkygia_thongtin_@item.Manghe">
+                                        <a asp-controller="KeKhaiDangKyGiaCsKd" asp-action="Index" asp-route-MaNghe="@item.Manghe" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text">@item.Tennghe</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </li> *@
                 }
             </ul>
         </div>

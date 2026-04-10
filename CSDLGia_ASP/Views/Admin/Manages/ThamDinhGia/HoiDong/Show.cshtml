@@ -1,0 +1,134 @@
+﻿@{
+    Layout = "_LayoutReports";
+    int record_hd_id = 1;
+}
+@model CSDLGia_ASP.Models.Manages.ThamDinhGia.ThamDinhGiaHD
+<br />
+<br />
+<p style="text-align: center; font-weight: bold; font-size: 30px;">THÔNG TIN HỒ SƠ</p>
+<p style="text-align: left; font-size: 16px;">Số quyết định: @Model.SoQD</p>
+<p style="text-align: left; font-size: 16px;">Ngày quyết định: @Model.NgayQD</p>
+<p style="text-align: left; font-size: 16px;">
+    Cơ quan ban hành: 
+    @if (Model.CoQuanBanHanh == "2103")
+    {
+        @:Uỷ ban nhân dân tỉnh Khánh Hoà
+    }
+    else if (Model.CoQuanBanHanh == "0213")
+    {
+        @:Sở Tài chính tỉnh Khánh Hoà
+    }
+    else
+    {
+        @:
+    }
+</p>
+<p style="text-align: left; font-size: 16px;">Nội dung quyết định: @Model.NoiDungQD</p>
+<p style="text-align: left; font-size: 16px;">Căn cứ pháp lý: @Model.CanCuPhapLy</p>
+<p style="text-align: left; font-size: 16px;">Căn cứ đề nghị: @Model.TheoDeNghi</p>
+<p style="text-align: left; font-size: 16px;">Tên hội đồng: @Model.TenHoiDong</p>
+<p style="text-align: left; font-size: 16px;">Nhiệm vụ hội đồng: @Model.NhiemVuHoiDong</p>
+<p style="text-align: left; font-size: 16px;">
+    Phân loại tố tụng:
+    @if(Model.ToTung == "0")
+    {
+        @:Không phải là hội đồng định giá trong hoạt động tố tụng hình sự
+    }
+    else if (Model.ToTung == "1")
+    {
+        @:Hội đồng định giá trong hoạt động tố tụng hình sự
+    }
+    else
+    {
+        @:
+    }
+</p>
+<p style="text-align: left; font-size: 16px;">
+    Cấp hội đồng:
+    @if (Model.CapHoiDong == 1)
+    {
+        @:Nhà nước
+    }else if (Model.CapHoiDong == 2)
+    {
+        @:Bộ, cơ quan trung ương
+    }else if (Model.CapHoiDong == 3)
+    {
+        @:Cấp Tỉnh/Thành phố
+    }else if (Model.CapHoiDong == 4)
+    {
+        @:Cấp Quận/Huyện
+    }else if (Model.CapHoiDong == 5)
+    {
+        @:Cơ quan, tổ chức, đơn vị khác
+    }
+    else
+    {
+        @:
+    }
+</p>
+<p style="text-align: left; font-size: 16px;">
+    Phân loại hội đồng:
+    @if (Model.LoaiHoiDong == 1)
+    {
+        @:Hội đồng theo vụ việc
+    }
+    else if (Model.LoaiHoiDong == 2)
+    {
+        @:Hội đồng thường xuyên
+    }
+    else
+    {
+        @:
+    }
+</p>
+<p style="text-align: left; font-size: 16px;">Chủ tịch hội đồng: @Model.ChuTichHoiDong</p>
+<p style="text-align: left; font-size: 16px;">Chức vụ: @Model.ChucVu</p>
+
+<br />
+<p style="color: blue; text-decoration-line: underline; font-weight: bold">Thông tin hồ sơ chi tiết</p>
+<table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 14px Times, serif;" id="data_render">
+
+    <thead>
+        <tr>
+            <th style="text-align:center" width="2%">#</th>
+            <th style="text-align:center">Họ và tên</th>
+            <th style="text-align:center">Chức vụ</th>
+            <th style="text-align:center">Vai trò</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @if (Model.ThamDinhGiaHDCt != null)
+            {
+                @foreach (var item in Model.ThamDinhGiaHDCt)
+                {
+                    <tr>
+                        <td style="text-align:center">@(record_hd_id++)</td>
+                        <td>@item.HoTen</td>
+                        <td>@item.ChucVu</td>
+                        <td>
+                            @if (item.VaiTro == "1")
+                            {
+                                <span>Phó chủ tịch Hội đồng </span>
+                            }
+                            else if (item.VaiTro == "2")
+                            {
+                                <span>Ủy viên thường trực Hội đồng</span>
+                            }
+                            else if (item.VaiTro == "3")
+                            {
+                                <span>Ủy viên</span>
+                            }
+                            else
+                            {
+                                <span>@item.VaiTro</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+
+</table>

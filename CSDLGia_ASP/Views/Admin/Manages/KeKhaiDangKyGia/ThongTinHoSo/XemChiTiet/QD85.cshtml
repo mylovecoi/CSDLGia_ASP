@@ -1,0 +1,133 @@
+﻿@{
+    Layout = "_LayoutReports";
+    var record_id = 1;
+}
+@model CSDLGia_ASP.ViewModels.Manages.KeKhaiGia.VMKkGiaShow
+
+<p style="text-align: center; font-weight: bold; font-size: 16px;">PHỤ LỤC VI</p>
+<p style="text-align: center; font-size: 16px;">MẪU VĂN BẢN KÊ KHAI GIÁ</p>
+<p style="text-align: center; font-size: 16px;"><i>(Kèm theo Nghị định số 85/2024/NĐ-CP ngày 10 tháng 7 năm 2024 của Chính phủ)</i></p>
+<table width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 20px; text-align: center;">
+    <tr>
+        <td width="40%" style="vertical-align: top;">
+            <span style="text-transform: uppercase;font-weight: bold">@Model.Tendn</span>
+            <hr style="width: 10%;vertical-align: top;  margin-top: 2px">
+        </td>
+        <td style="vertical-align: top;">
+            <b>
+                CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br />
+                Độc lập - Tự do - Hạnh phúc
+            </b>
+            <hr style="width: 15%;vertical-align: top; margin-top: 2px">
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top;">Số: @Model.Socv<br />V/v kê khai giá hàng hóa, dịch vụ bán trong<br />nước hoặc xuất khẩu</td>
+        <td style="text-align: right; vertical-align: top"><i style="margin-right: 25%;">@Model.Diadanh, ngày..@Model.Ngaynhap.Day..tháng..@Model.Ngaynhap.Month..năm..@Model.Ngaynhap.Year..</i></td>
+    </tr>
+</table>
+<p style="text-align: center; font-weight: bold; font-size: 16px;"><i><u>Kính gửi</u></i>: @Model.Tendvhienthi</p>
+<br />
+<br />
+<p style="text-indent: 30px">Thực hiện quy định tại Luật Giá, Nghị định số 85/2024/NĐ-CP ngày 10/07/2024 của Chính phủ quy định chi tiết một số điều của Luật Giá.</p>
+
+<p style="text-indent: 30px"><b>@Model.Tendn</b> gửi Bảng kê khai mức giá hàng hoá, dịch vụ (đính kèm).</p>
+
+<p style="text-indent: 30px">Mức giá kê khai này thực hiện từ ngày @Helpers.ConvertDateToStr(Model.Ngayhieuluc)</p>
+
+<p style="text-indent: 30px"><b>@Model.Tendn</b> xin chịu trách nhiệm trước pháp luật về tính chính xác của mức giá mà chúng tôi đã kê khai.</p>
+
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" style="margin: 20px auto;text-align: center; height:200px">
+    <tr>
+        <td width="40%" style="text-align: left; vertical-align: top;">
+            <span style="font-weight: bold;font-style: italic">Nơi nhận:</span><br />
+            - Như trên:<br />
+            - Lưu.
+        </td>
+        <td style="vertical-align: top;">
+            <b>THỦ TRƯỞNG ĐƠN VỊ</b><br />
+            <i>(Ký tên, đóng dấu)</i>
+        </td>
+    </tr>
+</table>
+<p>- Họ và tên người nộp văn bản: @Model.Ttnguoinop </p>
+<p>- Địa chỉ đơn vị thực hiện kê khai: @Model.Diachi</p>
+<p>- Số điện thoại liên lạc: @Model.Dtll</p>
+<p>- Email: @Model.Email</p>
+<p>- Số Fax: @Model.Fax</p>
+<p style="font-weight: bold; text-align: center">GHI NHẬN NGÀY NỘP VĂN BẢN KÊ KHAI GIÁ CỦA CƠ QUAN TIẾP NHẬN</p>
+<p style="font-style:italic; text-align: center">(Cơ quan tiếp nhận văn bản kê khai giá ghi ngày, tháng, năm nhận được văn bản kê khai giá<br />và đóng dấu công văn đến)</p>
+
+<p style="page-break-before: always">
+    <!--Trang2-->
+    <table width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 20px; text-align: center;">
+        <tr>
+            <td width="40%" style="vertical-align: top;">
+                <span style="text-transform: uppercase;font-weight: bold">@Model.Tendn</span>
+                <hr style="width: 10%;vertical-align: top;  margin-top: 2px">
+            </td>
+            <td style="vertical-align: top;">
+                <b>
+                    CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br />
+                    Độc lập - Tự do - Hạnh phúc
+                </b>
+                <hr style="width: 15%;vertical-align: top; margin-top: 2px">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align: right"><i style="margin-right: 25%;">@Model.Diadanh, ngày..@Model.Ngaynhap.Day..tháng..@Model.Ngaynhap.Month..năm..@Model.Ngaynhap.Year..</i></td>
+        </tr>
+    </table>
+    <p style="text-align: center; font-weight: bold; font-size: 16px;">BẢNG KÊ KHAI MỨC GIÁ</p>
+    <p style="text-align: center; font-style: italic">(Kèm theo công văn số @Model.Socv  ngày @Model.Ngaynhap.Day tháng @Model.Ngaynhap.Month năm @Model.Ngaynhap.Year của @Model.Tendn về việc kê khai giá hàng hóa,<br />dịch vụ bán trong nước hoặc xuất khẩu)</p>
+    <p>1. Mức giá kê khai bán trong nước hoặc xuất khẩu (bán buôn, bán lẻ)</p>
+    <table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 14px Times, serif;" id="data">
+        <thead>
+            <tr>
+                <th width="2%">STT</th>
+                <th>Tên hàng hóa, dịch vụ</th>
+                <th>Đặc điểm kinh tế - kỹ thuật, quy cách</th>
+                <th>Đơn vị tính</th>
+                <th>Loại giá (bán buôn, bán lẻ)</th>
+                <th>Giá kê khai kỳ liền kề trước (kèm số văn bản kê khai)</th>
+                <th>Giá kê khai kỳ này</th>
+                <th>Thời điểm định giá, điều chỉnh giá</th>
+                <th>Mức tăng/giảm so với kỳ liền kề trước</th>
+                <th>Tỷ lệ tăng/giảm so với kỳ liền kề trước</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.KeKhaiDangKyGiaCt.Count() > 0)
+            {
+                @foreach (var item in Model.KeKhaiDangKyGiaCt)
+                {
+                    <tr>
+                        <td style="text-align: center">@(record_id++)</td>
+                        <td>@item.TenDvCungUng</td>
+                        <td>@item.QuyCachChatLuong</td>
+                        <td style="text-align: center"></td>
+                        <td style="text-align: center"></td>
+                        <td style="text-align: right">@Helpers.ConvertDbToStr(item.MucGiaKeKhaiLk)</td>
+                        <td style="text-align: right">@Helpers.ConvertDbToStr(item.MucGiaKeKhai)</td>
+                        <td style="text-align: center"></td>
+                        <td style="text-align: right">@Helpers.ConvertDbToStr(item.MucGiaKeKhai - item.MucGiaKeKhaiLk)</td>
+                        @if (item.MucGiaKeKhaiLk == 0)
+                        {
+                            <td style="text-align: right">100</td>
+                        }
+                        else
+                        {
+                            string tyle = ((item.MucGiaKeKhai - item.MucGiaKeKhaiLk) / @item.MucGiaKeKhaiLk * 100).ToString("0.0");
+                            <td style="text-align: right">@tyle %</td>
+                        }
+                        <td>@item.HinhThucKinhDoanh</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <p>2. Phân tích nguyên nhân điều chỉnh giá bán giữa lần kê khai giá kỳ này so với kỳ liền kề trước: nêu cụ thể nguyên nhân do biến động của các yếu tố hình thành giá và các nguyên nhân khác tác động làm tăng hoặc giảm giá hàng hóa, dịch vụ.</p>
+    <p>3. Ghi rõ mức thuế giá trị gia tăng đã bao gồm trong giá.</p>
