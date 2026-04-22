@@ -39,6 +39,11 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                         model = model.Where(t => t.Madv == Madv);
                     }
 
+                    if (Phanloai == "" || string.IsNullOrEmpty(Phanloai))
+                    {
+                        model = model.Where(t => t.Level == "" || t.Level == null);
+                    }
+
                     if (Phanloai == "DN")
                     {
                         model = model.Where(t => t.Level == "DN");
@@ -77,10 +82,16 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                     var dsdiaban = _db.DsDiaBan.ToList();
                     var dsdonvi = _db.DsDonVi.ToList();
                     Madv = string.IsNullOrEmpty(Madv) ? "all" : Madv;
-                    var model = _db.Users.Where(t => !t.Sadmin);
+                    var model = _db.Users.Where(t => !t.Sadmin && t.Status == "Kích hoạt");
+
                     if (Madv != "all")
                     {
                         model = model.Where(t => t.Madv == Madv);
+                    }
+
+                    if (Phanloai == "" || string.IsNullOrEmpty(Phanloai))
+                    {
+                        model = model.Where(t => t.Level == "" || t.Level == null);
                     }
 
                     if (Phanloai == "DN")
@@ -121,7 +132,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                     ViewData["ChucNang"] = _db.GroupPermissions.ToList();
                     ViewData["DsDonVi"] = _db.DsDonVi;
                     ViewData["Title"] = "Thêm mới thông tin tài khoản";
-                    
+
                     ViewData["MenuLv1"] = "menu_qtnguoidung";
                     ViewData["MenuLv2"] = "menu_dstaikhoan";
 
@@ -232,7 +243,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                         ViewData["DsDonVi"] = _db.DsDonVi;
                         ViewData["MaDv"] = request.Madv;
                         ViewData["Title"] = "Thêm mới thông tin tài khoản";
-                        
+
                         ViewData["MenuLv1"] = "menu_qtnguoidung";
                         ViewData["MenuLv2"] = "menu_dstaikhoan";
                         return View("Views/Admin/Systems/DsTaiKhoan/Create.cshtml");
@@ -268,7 +279,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                     ViewData["quantri"] = (model.Chucnang == "QUANTRI;") ? "QUANTRI;" : "";*/
                     ViewData["DsDonVi"] = _db.DsDonVi;
                     ViewData["Title"] = "Chỉnh sửa thông tin tài khoản";
-                    
+
                     ViewData["MenuLv1"] = "menu_qtnguoidung";
                     ViewData["MenuLv2"] = "menu_dstaikhoan";
 
@@ -333,7 +344,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                         ViewData["DsDonVi"] = _db.DsDonVi;
                         ViewData["MaDv"] = request.Madv;
                         ViewData["Title"] = "Chỉnh sửa thông tin tài khoản";
-                        
+
                         ViewData["MenuLv1"] = "menu_qtnguoidung";
                         ViewData["MenuLv2"] = "menu_dstaikhoan";
                         return View("Views/Admin/Systems/DsTaiKhoan/Edit.cshtml");
@@ -390,7 +401,7 @@ namespace CSDLGia_ASP.Controllers.Admin.Systems
                     _db.SaveChanges();
 
                     var model = _db.Permissions.Where(t => t.Username == Chucnang).ToList();
-                    
+
                     var data_rolelist = _db.RoleList.Where(t => t.TrangThai == "Active").ToList();
 
                     var per = new List<Permissions>();
